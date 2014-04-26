@@ -1,0 +1,12 @@
+data/src/constants.py.i
+data/setup.py.i
+data/src/bitstamp.py.i
+data/src/time.py.i
+data/src/__init__.py.i
+data/src/utils.py.i
+data/src/rates/__init__.py.i
+data/etc/bhsite/bhsite.conf.i
+data/src/rates/bitstamp.py.i
+data/src/pricing.py.i
+data/src/enums.py.i
+data/src/bitcoind.py.i

@@ -1,0 +1,70 @@
+{% extends 'base.htm' %}
+{% block content %}
+<style>
+	.label-shareholder {font-size:1.4em; color:red; font-weight:bold; margin:40px auto 15px;}
+	.table_bold {font-weight:bold;}
+	#search_section {margin:50px;}
+	#search_field {margin:10px;}
+</style>
+
+
+<div id="search_section">
+  <h1>My Shareholdings</h1>
+  <label class="label-shareholder">Input shareholder ID</label>
+  <input type="text" class="input-medium" id="search_field">
+  <button type="submit" class="btn btn-primary" id="submit_search" onclick="return search()">Show the number of shares I own</button>
+  
+  <br><br><br>The total number of company shares is fixed at 100,000,000 (one hundred million shares).<br>
+  No additional emission of company shares is intended unless unanimously decided by all current shareholders.
+</div>
+
+<fieldset>
+  <table class="table table-bordered table-striped table-hover" id="query_table">
+    <tbody>
+      <tr class="warning">
+        <td id="sh_id"></td>
+        <td id="shares"></td>
+      </tr>
+    </tbody>
+  </table>
+	<div style="clear:both"></div>
+
+</fieldset>
+
+
+
+<script>
+
+  $(document).ready(function() {
+    $("#query_table").hide();
+  });
+
+  function search() {
+    var search_txt = document.getElementById("search_field").value;
+
+    $.ajax({
+        url: "/future/investors/",
+        type: "POST",
+        data: {shareholder_id: search_txt},
+        success: function(data) {
+            if(data.status == 0) {
+              $("#sh_id").text(data.sh_id);
+              $("#shares").text(data.shares);
+              $("#query_table").show();
+            }
+            else {
+              alert("ID " + search_txt +" not found!");
+              $("#query_table").hide();
+            }
+        },
+        error: function(data) {
+            {# alert('error')#}
+        }
+    });
+
+    return true;
+  }
+
+</script>
+
+{% endblock content %}

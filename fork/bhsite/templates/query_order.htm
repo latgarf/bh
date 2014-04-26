@@ -1,0 +1,151 @@
+{% extends 'base.htm' %}
+
+{% block content %}
+
+<style>
+body, label, input, button, select, textarea {line-height:initial;}
+
+.header-status {margin-top: 20px; font-size:3em; font-weight:bold;}
+.label-status {font-size:1.4em; color:red; font-weight:bold;}
+
+.table_bold {font-weight:bold;}
+
+#search_section {margin-top:50px; margin-bottom:50px;}
+#search_field   {margin-top:10px;}
+</style>
+
+<div class="header-status blue">Order Status</div>
+
+  <div id="search_section">
+    <label class="label-status">Input your order ID</label>
+    <input type="text" class="input-medium" id="search_field">
+    <button type="submit" class="btn btn-primary" id="submit_search" onclick="return search()">Display Order Status</button>
+  </div>
+
+<fieldset>
+
+  <table class="table table-bordered table-striped table-hover" id="query_table">
+
+    <tbody>
+      <tr class="warning">
+        <td>Order status</td>
+        <td id="status"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Insurance from</td>
+        <td id="type"></td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr class="warning">
+        <td>Amount of bitcoins insured</td>
+        <td id="amount"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Expires at</td>
+        <td id="expiry"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Opened at</td>
+        <td id="opened"></td>
+      </tr>
+    </tbody>
+<!--
+    <tbody>
+      <tr class="warning">
+        <td>Insurance fee quoted</td>
+        <td id="fee"></td>
+      </tr>
+    </tbody>
+-->
+    <tbody>
+      <tr class="warning">
+        <td>Insurance fee paid</td>
+        <td id="fee"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Average BTC/USD rate when the order was opened</td>
+        <td id="rate"></td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr class="warning">
+        <td>Your bitcoin address (for insurance payment)</td>
+        <td id="addr_user"></td>
+      </tr>
+    </tbody>
+
+     <tbody>
+      <tr class="warning">
+        <td>Order ID</td>
+        <td id="order_id"></td>
+      </tr>
+    </tbody>
+
+<!--    <tbody>
+      <tr class="warning">
+        <td>Our Bitcoin address paid to</td>
+        <td id="addr_bh"></td>
+      </tr>
+    </tbody> -->
+  </table>
+
+  <div style="clear:both"></div>
+
+</fieldset>
+
+<script>
+  $(document).ready(function() {
+    $("#query_table").hide();
+  });
+
+  function search() {
+    var search_txt = document.getElementById("search_field").value;
+
+    $.ajax({
+        url: "/future/query/",
+        type: "POST",
+        data: {order_id: search_txt},
+        success: function(data) {
+            if(data.order_id == "") {
+              alert("Order " + search_txt + " does not exist!");
+              $("#query_table").hide();
+              return;
+            }
+
+            $("#order_id").text(data.order_id);
+            $("#opened").text(data.time_opened);
+            $("#type").text(data.insurance_type);
+            $("#expiry").text(data.expiry);
+            $("#amount").text(data.amount);
+            $("#fee").text(data.fee);
+            $("#addr_user").text(data.addr_user);
+            $("#addr_bh").text(data.addr_bh);
+            $("#status").text(data.st);
+            $("#rate").text(data.rate);
+            $("#query_table").show();
+        },
+        error: function(data) {
+            {# alert('error')#}
+        }
+    });
+
+    return true;
+  }
+
+</script>
+
+{% endblock content %}
+
