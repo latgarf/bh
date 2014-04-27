@@ -53,6 +53,14 @@ def contact(request):
     return render(request, 'contact.htm')
 
 @csrf_exempt
+def options(request):
+    return render(request, 'options.htm')
+
+@csrf_exempt
+def futures(request):
+    return render(request, 'futures.htm')
+
+@csrf_exempt
 def faq(request):
     return render(request, 'faq.htm')
 

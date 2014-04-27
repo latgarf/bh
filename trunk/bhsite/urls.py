@@ -7,6 +7,8 @@ urlpatterns = patterns('',
 	url(r'^experts', views.experts),
 	url(r'^faq', views.faq),
 	url(r'^contact', views.contact),
+    url(r'^futures', views.futures),
+    url(r'^options', views.options),
 
 	url(r'^how_it_works', views.how_it_works),
 

@@ -1,4 +1,5 @@
 #pricing models
+
 from datetime import date
 from math import sqrt
 from scipy import stats
@@ -15,8 +16,8 @@ def bsPrice(s, k, t, v, r, cp):
 # d_or_i: 0 for decrease, 1 for increase
 def getPremium(rate, d, amount, product_id) :
     now = date.today()
-    n = (d - now).days
-    if (n <= 0): n = 1
+    n = (d - now).days / 365
+    if (n <= 0): n = 1 / 365
 
     drift = 1
     s = rate + n * drift
