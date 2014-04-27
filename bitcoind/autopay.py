@@ -34,11 +34,12 @@ def auto_pay(do_pay):
     total = 0
     paid_count = 0
     bs = bitcoind.BitcoindService()
-    for pid, uid, addr, amount, rate_i in c.execute(query):
+    c.execute(query)
+    orders = c.fetchall()
+    for pid, uid, addr, amount, rate_i in orders:
         total +=1
         rate_exp = get_rate()
         amount_paid = calculate_payment(rate_exp, rate_i, amount, int(pid))
-        print('amount is ', amount_paid)
         # Dry run
         if not do_pay:
             print('[DRY RUN]: pay %f to address %s, uid %s' % (amount_paid, addr, uid))

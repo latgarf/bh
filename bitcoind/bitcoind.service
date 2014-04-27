@@ -1,0 +1,7 @@
+[Unit]
+Description=Bitcoind Daemon
+
+[Service]
+ExecStart=/usr/bin/bitcoind --daemon
+Restart=always
+KillSignal=SIGQUIT

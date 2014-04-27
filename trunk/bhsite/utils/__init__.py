@@ -4,12 +4,16 @@ from http import client
 import os
 import datetime, time
 import json
+from bhsdk import config
 
 def getAmount():
     return 0.1
 
 def getExpiryTime(date):
-    exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=21)
+    hm = config.get('orders',  'order_exp_time').split(':')
+    hr = int(hm[0])
+    min = int(hm[1])
+    exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=hr, minutes=min)
     return exp_time
 
 if __name__ == '__main__':
