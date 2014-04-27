@@ -78,7 +78,7 @@ def process_new_orders(new_order_dict, dry_run):
             print('uid %s, %s received, %f amount opened, status %s' %(uid, received, amount, '1'))
             continue
         if not add_new_order(uid, new_order_dict[uid]):
-            logger.warning('Open new order %s with payment %f and amount %f failed' % (uid, received, amount_opened))
+            logger.warning('Open new order %s with payment %f and amount %f failed' % (uid, received, amount))
         total +=1
     logger.info('%s: %d new orders opened' % (now_epoch_str(), total))
 

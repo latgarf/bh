@@ -55,8 +55,8 @@ class Opened(models.Model):
     time_opened = models.CharField(max_length=14, blank=True)
     payment_received = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
     amount_opened = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
-    time_closed = models.CharField(max_length=14, blank=True)
-    time_paid = models.CharField(max_length=14, blank=True)
+    time_closed = models.CharField(null=True, max_length=14, blank=True)
+    time_paid = models.CharField(null=True, max_length=14, blank=True)
     payment_sent = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
     class Meta:
         db_table = 'opened'
