@@ -24,7 +24,7 @@ def getPremium(rate, d, amount, product_id) :
     s = rate + n * drift
     k = rate
     r = 0
-    v = 0.2
+    v = 2.0
 
     c = 1
     if product_id == BTCUSD_PUT_SHORT:

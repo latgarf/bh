@@ -1,4 +1,5 @@
 #pricing models
+
 from datetime import date
 from math import sqrt
 from scipy import stats
@@ -18,16 +19,17 @@ def getPremium(rate, d, amount, product_id) :
     n = (d - now).days
     if (n <= 0): n = 1
 
+    t = float(n) / 365
     drift = 1
     s = rate + n * drift
     k = rate
     r = 0
-    v = 0.2
+    v = 2.0
 
     c = 1
     if product_id == BTCUSD_PUT_SHORT:
         c = -1
-    return amount * bsPrice(s,k,n,v,r,c) / rate
+    return amount * bsPrice(s,k,t,v,r,c) / rate
 
 def calculate_payment(rate_expiry, rate_initial, amount, pid):
     if pid == BTCUSD_CALL_SHORT:
