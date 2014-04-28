@@ -1,0 +1,10 @@
+[Unit]
+Description=uwsgi bh site
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /var/www/bh/trunk/uwsgi.ini --py-autoreload=3
+Restart=always
+KillSignal=SIGQUIT
+
+[Install]
+WantedBy=multi-user.target

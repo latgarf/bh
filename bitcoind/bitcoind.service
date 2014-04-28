@@ -5,3 +5,6 @@ Description=Bitcoind Daemon
 ExecStart=/usr/bin/bitcoind --daemon
 Restart=always
 KillSignal=SIGQUIT
+
+[Install]
+WantedBy=multi-user.target
