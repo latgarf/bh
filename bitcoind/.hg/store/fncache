@@ -1,9 +1,0 @@
-data/bhdb_schema.sql.i
-data/paymentchecker.py.i
-data/bitcoind_commands/__init__.py.i
-data/autopay.py.i
-data/bitcoind.py.i
-data/bh_bitcoind.conf.i
-data/README.i
-data/share_register.py.i
-data/fetch_bitstamp_history.py.i
