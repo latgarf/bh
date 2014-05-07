@@ -3,6 +3,8 @@ from bhsite import views
 
 urlpatterns = patterns('',
 
+    url(r'^dtpicker', views.dtpicker),
+
 	url(r'^investors', views.investors),
 	url(r'^experts', views.experts),
 	url(r'^faq', views.faq),

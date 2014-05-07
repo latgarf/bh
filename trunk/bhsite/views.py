@@ -44,6 +44,11 @@ def investors(request):
         return HttpResponse(json.dumps(ret), mimetype="application/json")
     return render(request, 'shareholders.htm')
 
+
+@csrf_exempt
+def dtpicker(request):
+    return render(request, 'dtpicker.htm')
+
 @csrf_exempt
 def experts(request):
     return render(request, 'experts.htm')

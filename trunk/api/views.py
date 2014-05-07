@@ -5,10 +5,7 @@ import json
 
 
 def query_cost(request):
-    ret = {
-        'status': 0,
-        'value': 1
-    }
+    ret = { 'status': 0, 'value': 1 }
     return HttpResponse(json.dumps(ret), content_type='application/json')
 
 def query_cost_test(request):

@@ -12,7 +12,6 @@
 
 	.info div {font-size:3em;}
 	.info label {color:#2a9cc1; font-size:16px;}
-	//.info label {color:#1b1b1b; font-size:16px;}
 
 	.homepage-header {font-size:3.75em; font-weight:900; text-align:center; margin-top:5%;}
 	.homepage-text {font-size:1.25em; margin-top:3%; text-align:center; color:black;}
@@ -21,7 +20,6 @@
 	.btc_address_our {margin:1% 0 1%; font-size:1.5em; color:red;}
 	.submit-confirm {background-color:#FFFAB2;}
 </style>
-
 
 
 <div class="homepage-header blue">Bitcoin Options, Futures, and<br>Exchange Rate Insurance</div>
@@ -55,6 +53,28 @@
 	</div>
 
 	<div class="row-fluid">
+		<div class="span4"><label class="control-label form-label" for="id_date">EXPIRY &nbsp;&nbsp;&nbsp;&nbsp;</label>
+		</div>
+
+		<div class="span6 controls input-append date" id="datetimepicker" data-date="{{date}}" data-date-format="yyyy-mm-dd">
+			<input type="text" class="input-medium" name="date" id="id_date" value="{{date}}">
+			<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+		</div>
+	</div>
+
+<!-- Original datetimepicker code:
+
+        <div id="datetimepicker" class="input-append date">
+          <input type="text"></input>
+          <span class="add-on">
+            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+          </span>
+        </div>
+-->
+
+<!-- BH original DatePicker row in table of insurance parameters (drop-down calendar)
+
+	<div class="row-fluid">
 		<div class="span4"><label class="control-label form-label" for="id_date">EXPIRY DATE &nbsp;&nbsp;&nbsp;&nbsp;</label>
 		</div>
 		<div class="span6 controls input-append date" id="dp" data-date="{{date}}" data-date-format="yyyy-mm-dd">
@@ -62,6 +82,7 @@
 			<span class="add-on"><i class="icon-calendar"></i></span>
 		</div>
 	</div>
+-->
 
 	<div class="row-fluid">
 
@@ -113,6 +134,7 @@
 
 </div>
 
+
 <script type="text/javascript">
     $(document).ready(function() {
         $("#id_bh_address").hide();
@@ -120,12 +142,11 @@
     })
 </script>
 
-<script>
 
+<script>
     function refreshFee() {
         var form = $('#contractForm');
 
-        // $("#info_date").text($('#id_date').val());
         var a = Number(document.getElementById('id_amount').value)
         if(a <= 0) {
             $("#id_fee").text(Number(0).toFixed(8));
@@ -147,13 +168,6 @@
         });
     }
 
-    // function showBHAddress() {
-    //     var add = document.getElementById('id_address').value
-    //     if(check(add)) {
-    //         $("#id_bh_address").show();
-    //     }
-    // }
-
     function validateForm() {
         var message = "";
 
@@ -162,8 +176,8 @@
         if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
             var dt = new Date(dvalue);
             var today = new Date()
-            //if(dt < today)
-            //    message += "Date should be no earlier than today!\n";
+            if(dt < today)
+                message += "Date should be no earlier than today!\n";
            
             today.setDate(today.getDate()+7)
             if(dt > today)
@@ -226,7 +240,26 @@
 
     $('#dp').datepicker().on('changeDate', function(ev){refreshFee()});
     $('#id_amount, #id_date').on('input', function() {refreshFee()});
-    // $('#protect_direction').on('input', function() {showBHAddress()});
 
 </script>
+
+<!----------------------  DateTimePicker  ------------------------------------------------------->
+<!--
+<div id="datetimepicker" class="input-append date">
+  <input type="text"></input>
+  <span class="add-on">
+    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+  </span>
+</div>
+-->
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
+<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>
+
+<script type="text/javascript">
+  $('#datetimepicker').datetimepicker({ format: 'yyyy-MM-dd hh:mm', language: 'en-US' });
+</script>
+
+
 {% endblock content %}
