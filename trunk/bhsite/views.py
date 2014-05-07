@@ -77,11 +77,11 @@ def futurebuy(request):
         rate=form.cleaned_data['rate']
         date=form.cleaned_data['date']
         product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
-
+        print('AT-line-80')
         trgAmount = form.cleaned_data['amount']
         srcAmount = round(trgAmount * rate, 8)
         fee = getPremium(rate, date, trgAmount, product_id)
-
+        print('AT-line-84')
         filterargs = {
             'time_expiry': to_epoch_str(getExpiryTime(date)),
             'amount_ordered': trgAmount,
@@ -89,9 +89,9 @@ def futurebuy(request):
             'rate': rate,
             'product_id': prod_str(product_id)
         }
-
         duplicated = False
         query_id = gen_query_id()
+        print(query_id)
         records = Transaction.objects.filter(**filterargs)
         if len(records) > 0:
             duplicated = True
