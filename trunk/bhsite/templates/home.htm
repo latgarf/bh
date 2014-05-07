@@ -162,13 +162,12 @@
         if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
             var dt = new Date(dvalue);
             var today = new Date()
-            if(dt < today)
-                message += "Date should be no earlier than today!\n";
-
+            //if(dt < today)
+            //    message += "Date should be no earlier than today!\n";
+           
             today.setDate(today.getDate()+7)
             if(dt > today)
                 message += "Date should be within 7 days from today!\n";
-
         }
         else
             message += "Not a YYYY-MM-DD format date: '" + dvalue + "'\n";
