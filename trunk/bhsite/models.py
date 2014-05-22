@@ -9,18 +9,6 @@ CURRENCY_CHOICES = (
     ('BTC', 'BTC'),
 )
 
-# Deprecated !!
-# class FutureTransaction(models.Model):
-# 	user_address = models.CharField(max_length=128)
-# 	# receive_address = models.CharField(max_length=128)
-# 	due_date = models.DateTimeField()
-# 	# ts = models.DateTimeField() # When transaction happens
-# 	price = models.FloatField()
-# 	amount = models.FloatField()
-# 	settlement_price = models.FloatField()
-# 	# fee = models.FloatField()
-# 	# status = models.IntegerField()
-
 class Transaction(models.Model):
     time_ordered = models.CharField(max_length=14, default=now_epoch_str)
     product_id = models.CharField(max_length=4)

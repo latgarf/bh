@@ -2,8 +2,11 @@ from django.conf.urls import *
 from bhsite import views
 
 urlpatterns = patterns('',
+    url(r'^$', views.future, name='future'),
+    url(r'^premium/', views.premium, name='premium'),
+    url(r'^query/', views.query, name='query'),            # order status page  ../future/query/
 
-    url(r'^dtpicker', views.dtpicker),
+    url(r'^validate_address/', views.validate_address, name='validate_address'),
 
 	url(r'^investors', views.investors),
 	url(r'^experts', views.experts),
@@ -14,9 +17,4 @@ urlpatterns = patterns('',
 
 	url(r'^how_it_works', views.how_it_works),
 
-    url(r'^$', views.futurebuy, name='future'),
-    url(r'^premium/', views.premium, name='premium'),
-    url(r'^query/', views.query, name='query'),
-
-    url(r'^validate_address/', views.validate_address, name='validate_address'),
     )

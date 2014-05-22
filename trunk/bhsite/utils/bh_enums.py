@@ -1,4 +1,3 @@
-
 class TransactionStatus:
     MIN = 0
     WAIT_FOR_PAYMENT = 0

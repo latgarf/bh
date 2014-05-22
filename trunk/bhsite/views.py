@@ -1,4 +1,5 @@
 # Create your views here.
+
 from django.template import loader, Context
 from django.http import QueryDict, HttpResponse
 from django.shortcuts import render
@@ -27,6 +28,177 @@ import json
 
 NUMER_FORMAT = "{:.8f}"
 USD_FORMAT =  "{:.2f}"
+
+
+def future(request):
+    bs = BitcoindService()
+    form = SubmitForm(request.POST)
+
+    if form.is_valid():
+        
+        address_bh = bs.get_new_address()
+        rate=form.cleaned_data['rate']
+        date=form.cleaned_data['date']
+        expiry=form.cleaned_data['expiry']  # AT 2014-05-09
+        product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
+        trgAmount = form.cleaned_data['amount']
+        srcAmount = round(trgAmount * rate, 8)
+        fee = getPremium(rate, expiry, trgAmount, product_id)
+        
+        filterargs = {
+            'time_expiry': to_epoch_str(getExpiryTime(expiry)),
+#           'time_expiry': to_epoch_str(getExpiryTime(date)),
+            'amount_ordered': trgAmount,
+            'addr_user': form.cleaned_data['address'],
+            'rate': rate,
+            'product_id': prod_str(product_id)
+        }
+        
+        duplicated = False
+        query_id = gen_query_id()
+        print(query_id)
+        
+        records = Transaction.objects.filter(**filterargs)
+        if len(records) > 0:
+            duplicated = True
+        else:
+            time_expiry = to_epoch_str(getExpiryTime(expiry))
+#           time_expiry = to_epoch_str(getExpiryTime(date))
+            r = Transaction.objects.create(
+                time_expiry = time_expiry,
+                product_id = prod_str(product_id),
+                amount_ordered = trgAmount,
+                addr_user = form.cleaned_data['address'],
+                addr_our = address_bh,
+                fee_quoted = fee,
+                rate = rate,
+                status = TS.WAIT_FOR_PAYMENT,
+                query_id = query_id
+            )
+            logger.info('Create order %s (query ID %s) for IP %s. New BTC address %s' %(r.order_id, r.query_id, getIP(request), address_bh))
+
+
+        ord_exp_time = utc_now() + datetime.timedelta(seconds=int(config.get('orders', 'order_exp_seconds')))
+        print(ord_exp_time)
+        
+        ret = {
+            'duplicated': duplicated,
+            'ord_exp_time': ord_exp_time.strftime('%Y-%m-%d %H:%M:%S'),
+            'order_id': query_id,
+            'address': address_bh
+        }
+
+        ret_json = json.dumps(ret)
+        return HttpResponse(ret_json, mimetype="application/json")
+
+
+    # default values
+    rate = get_realtime_rate()
+    ma_rate = get_rate()
+    trgAmount = getAmount()
+    date = utc_now().date() + datetime.timedelta(days=1)
+    fee = getPremium(rate, date, trgAmount, BTCUSD_CALL_SHORT)
+    fee_usd = fee * rate
+    exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=21)
+    ret = {
+        'trgAmount': NUMER_FORMAT.format(trgAmount),
+        'rate': USD_FORMAT.format(rate),
+        'ma_rate': USD_FORMAT.format(ma_rate),
+        'date': date.strftime('%Y-%m-%d'),
+        'expiry': date.strftime('%Y-%m-%d %H:%M'),
+        'fee': NUMER_FORMAT.format(fee),
+        'fee_usd': USD_FORMAT.format(fee_usd),
+        'form': form
+    }
+
+    return render(request, 'home.htm', ret)
+
+
+def pay_fee_view(request):
+    return render(request, 'pay_fee.htm');
+
+
+@csrf_exempt
+def premium(request):
+    fee, fee_usd, srcAmount, rate = 0,0,0,0
+    form = HomeForm(request.POST)
+    if form.is_valid():
+        trade_amount=form.cleaned_data['amount']
+        closing_date=form.cleaned_data['date']
+        rate = form.cleaned_data['rate']
+        direction = int()
+        product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
+        # srcAmount = round(trade_amount * rate, 8)
+        fee = getPremium(rate, closing_date, trade_amount, product_id)
+        fee_usd = fee * rate
+
+    json_data = json.dumps({'fee_usd': USD_FORMAT.format(fee_usd), 'fee': NUMER_FORMAT.format(fee), 'rate': USD_FORMAT.format(rate)})
+    # json data is just a JSON string now.
+    return HttpResponse(json_data, mimetype="application/json")
+
+
+@csrf_exempt
+def validate_address(request):
+    ret = 0
+    form = HomeForm(request.POST)
+    if(request.method == 'POST'):
+        address = request.POST['address']
+        if address:
+            bs = BitcoindService()
+            if bs.validate_address(address):
+                ret = 1
+    return HttpResponse(json.dumps({'is_valid': ret}), mimetype="application/json")
+
+
+@csrf_exempt
+def query(request):
+    if(request.method == 'POST'):
+        order_id = request.POST['order_id']
+        filterargs = {'query_id': order_id}
+        submitted = Transaction.objects.filter(**filterargs)
+
+        if submitted:
+            i = submitted[0]
+            ret = {
+                'order_id': i.query_id,
+                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
+                'insurance_type': get_verbal_insurance_type(i.product_id),
+                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_expiry))),
+                'amount': float(i.amount_ordered),
+                'addr_user': i.addr_user,
+                'addr_bh': i.addr_our,
+                'fee': float(i.fee_quoted),
+                'rate': float(i.rate),
+                'st': get_verbal_status(int(i.status))
+            }
+        else:
+            opened = Opened.objects.filter(**filterargs)
+            if opened:
+                o = opened[0]
+                ret = {
+                'order_id': o.query_id,
+                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),
+                'insurance_type': get_verbal_insurance_type(o.product_id),
+                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_expiry))),
+                'amount': float(o.amount_opened),
+                'addr_user': o.addr_user,
+                'addr_bh': o.addr_our,
+                'fee': float(o.payment_received),
+                'rate': float(o.rate),
+                'st': get_verbal_status(int(o.status))
+                }
+            else:
+                ret = {'order_id': ''}
+
+        return HttpResponse(json.dumps(ret), mimetype="application/json")
+
+    return render(request, 'query_order.htm')
+
+
+
+
+
+
 
 @csrf_exempt
 def investors(request):
@@ -73,112 +245,6 @@ def faq(request):
 def how_it_works(request):
     return render(request, 'how_it_works.htm')
 
-def futurebuy(request):
-    bs = BitcoindService()
-    form = SubmitForm(request.POST)
-
-    if form.is_valid():
-        address_bh = bs.get_new_address()
-        rate=form.cleaned_data['rate']
-        date=form.cleaned_data['date']
-        product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
-        print('AT-line-80')
-        trgAmount = form.cleaned_data['amount']
-        srcAmount = round(trgAmount * rate, 8)
-        fee = getPremium(rate, date, trgAmount, product_id)
-        print('AT-line-84')
-        filterargs = {
-            'time_expiry': to_epoch_str(getExpiryTime(date)),
-            'amount_ordered': trgAmount,
-            'addr_user': form.cleaned_data['address'],
-            'rate': rate,
-            'product_id': prod_str(product_id)
-        }
-        duplicated = False
-        query_id = gen_query_id()
-        print(query_id)
-        records = Transaction.objects.filter(**filterargs)
-        if len(records) > 0:
-            duplicated = True
-        else:
-            time_expiry = to_epoch_str(getExpiryTime(date))
-            r = Transaction.objects.create(
-                time_expiry = time_expiry,
-                product_id = prod_str(product_id),
-                amount_ordered = trgAmount,
-                addr_user = form.cleaned_data['address'],
-                addr_our = address_bh,
-                fee_quoted = fee,
-                rate = rate,
-                status = TS.WAIT_FOR_PAYMENT,
-                query_id = query_id
-            )
-            logger.info('Create order %s (query ID %s) for IP %s. New BTC address %s' %(r.order_id, r.query_id, getIP(request), address_bh))
-
-        ord_exp_time = utc_now() + datetime.timedelta(seconds=int(config.get('orders', 'order_exp_seconds')))
-        ret = {
-            'duplicated': duplicated,
-            'ord_exp_time': ord_exp_time.strftime('%Y-%m-%d %H:%M:%S'),
-            'order_id': query_id,
-            'address': address_bh
-        }
-        ret_json = json.dumps(ret)
-        return HttpResponse(ret_json, mimetype="application/json")
-
-    # default value
-    rate = get_realtime_rate()
-    ma_rate = get_rate()
-    trgAmount = getAmount()
-    date = utc_now().date() + datetime.timedelta(days=1)
-    fee = getPremium(rate, date, trgAmount, BTCUSD_CALL_SHORT)
-    fee_usd = fee * rate
-    exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=21)
-    ret = {
-        # 'srcAmount': NUMER_FORMAT.format(srcAmount),
-        'trgAmount': NUMER_FORMAT.format(trgAmount),
-        'rate': USD_FORMAT.format(rate),
-        'ma_rate': USD_FORMAT.format(ma_rate),
-        'date': date.strftime('%Y-%m-%d'),
-        'fee': NUMER_FORMAT.format(fee),
-        'fee_usd': USD_FORMAT.format(fee_usd),
-        # 'pay_to_address': bs.get_new_address(),
-        'form': form
-    }
-
-    return render(request, 'home.htm', ret)
-
-def pay_fee_view(request):
-    return render(request, 'pay_fee.htm');
-
-@csrf_exempt
-def premium(request):
-    fee, fee_usd, srcAmount, rate = 0,0,0,0
-    form = HomeForm(request.POST)
-    if form.is_valid():
-        trade_amount=form.cleaned_data['amount']
-        closing_date=form.cleaned_data['date']
-        rate = form.cleaned_data['rate']
-        direction = int()
-        product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
-        # srcAmount = round(trade_amount * rate, 8)
-        fee = getPremium(rate, closing_date, trade_amount, product_id)
-        fee_usd = fee * rate
-
-    json_data = json.dumps({'fee_usd': USD_FORMAT.format(fee_usd), 'fee': NUMER_FORMAT.format(fee), 'rate': USD_FORMAT.format(rate)})
-    # json data is just a JSON string now.
-    return HttpResponse(json_data, mimetype="application/json")
-
-@csrf_exempt
-def validate_address(request):
-    ret = 0
-    form = HomeForm(request.POST)
-    if(request.method == 'POST'):
-        address = request.POST['address']
-        if address:
-            bs = BitcoindService()
-            if bs.validate_address(address):
-                ret = 1
-    return HttpResponse(json.dumps({'is_valid': ret}), mimetype="application/json")
 
 @csrf_exempt
 def admin(request):
@@ -196,47 +262,3 @@ def admin(request):
         logger.info('Shareholder request from IP %s for shareholder ID %s' % (getIP(request), filterargs['shareholder_id']))
         return HttpResponse(json.dumps(ret), mimetype="application/json")
     return render(request, 'shareholders.htm')
-
-@csrf_exempt
-def query(request):
-    if(request.method == 'POST'):
-        order_id = request.POST['order_id']
-        filterargs = {'query_id': order_id}
-        submitted = Transaction.objects.filter(**filterargs)
-
-        if submitted:
-            i = submitted[0]
-            ret = {
-                'order_id': i.query_id,
-                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
-                'insurance_type': get_verbal_insurance_type(i.product_id),
-                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_expiry))),
-                'amount': float(i.amount_ordered),
-                'addr_user': i.addr_user,
-                'addr_bh': i.addr_our,
-                'fee': float(i.fee_quoted),
-                'rate': float(i.rate),
-                'st': get_verbal_status(int(i.status))
-            }
-        else:
-            opened = Opened.objects.filter(**filterargs)
-            if opened:
-                o = opened[0]
-                ret = {
-                'order_id': o.query_id,
-                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),
-                'insurance_type': get_verbal_insurance_type(o.product_id),
-                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_expiry))),
-                'amount': float(o.amount_opened),
-                'addr_user': o.addr_user,
-                'addr_bh': o.addr_our,
-                'fee': float(o.payment_received),
-                'rate': float(o.rate),
-                'st': get_verbal_status(int(o.status))
-                }
-            else:
-                ret = {'order_id': ''}
-
-        return HttpResponse(json.dumps(ret), mimetype="application/json")
-
-    return render(request, 'query_order.htm')

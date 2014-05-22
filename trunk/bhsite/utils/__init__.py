@@ -7,7 +7,7 @@ import json
 from bhsdk import config
 
 def getAmount():
-    return 0.1
+    return 1.0
 
 def getExpiryTime(date):
     hm = config.get('orders',  'order_exp_time').split(':')
@@ -16,12 +16,6 @@ def getExpiryTime(date):
     exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=hr, minutes=min)
     return exp_time
 
-if __name__ == '__main__':
-    price = getRate()
-    print('current price is:', price)
-    print('desc fee is ', getPremium(198.2, date.today(), 0.1, 0))
-    print('incs fee is ', getPremium(198.2, date.today(), 0.1, 1))
-
 def getIP(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -29,3 +23,10 @@ def getIP(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+if __name__ == '__main__':
+    price = getRate()
+    print('current price is:', price)
+    print('desc fee is ', getPremium(198.2, date.today(), 0.1, 0))
+    print('incs fee is ', getPremium(198.2, date.today(), 0.1, 1))

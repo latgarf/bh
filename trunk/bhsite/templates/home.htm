@@ -32,87 +32,63 @@
 
 <div class="header2 blue">Select Insurance Parameters</div>
 
-<!------------------------------------------------------------------------------>
+<!---------------- Insurance Parameters Table -------------------------------------------------------------->
 
 <div class="row-fluid">
 
-<form class="form-inline" id="contractForm" action="" onsubmit="return validateForm()" method="POST">
-	{% csrf_token %}
-    <input type="hidden" value="{{ma_rate}}" name="rate" />
-    <input type="hidden" value="a" name="bh_address" />
-
-	<div class="row-fluid">
-	    <div class="span4"><label class="control-label form-label" for="protect_direction">INSURE FROM &nbsp;&nbsp;&nbsp;</label>
+    <form class="form-inline" id="contractForm" action="" onsubmit="return validateForm()" method="POST">
+        {% csrf_token %}
+        <input type="hidden" value="{{ma_rate}}" name="rate" />
+        <input type="hidden" value="a" name="bh_address" />
+    
+        <div class="row-fluid">
+            <div class="span4"><label class="control-label form-label" for="protect_direction">INSURE FROM &nbsp;&nbsp;&nbsp;</label>
+            </div>
+            <div class="span6">
+                <select id="protect_direction" onchange="refreshFee()" name="select_direction">
+                    <option value="0">DECREASE in bitcoin value vs USD</option>
+                    <option value="1">INCREASE in bitcoin value vs USD</option>
+                </select>
+            </div>
         </div>
-        <div class="span6">
-			<select id="protect_direction" onchange="refreshFee()" name="select_direction">
-				<option value="0">DECREASE in bitcoin value vs USD</option>
-				<option value="1">INCREASE in bitcoin value vs USD</option>
-			</select>
-	    </div>
-	</div>
 
-	<div class="row-fluid">
-		<div class="span4"><label class="control-label form-label" for="id_date">EXPIRY &nbsp;&nbsp;&nbsp;&nbsp;</label>
-		</div>
 
-		<div class="span6 controls input-append date" id="datetimepicker" data-date="{{date}}" data-date-format="yyyy-mm-dd">
-			<input type="text" class="input-medium" name="date" id="id_date" value="{{date}}">
-			<span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-		</div>
-	</div>
+        <div class="row-fluid">
 
-<!-- Original datetimepicker code:
+            <div class="span4"><label class="control-label form-label" for="id_date">EXPIRY &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+    
+            <div class="span6 controls input-append date" id="datetimepicker" data-date="{{expiry}}" data-date-format="yyyy-mm-dd hh:mm">
+                <input type="text" class="input-medium" name="date" id="id_date" value="{{expiry}}">
+                <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+            </div>
 
-        <div id="datetimepicker" class="input-append date">
-          <input type="text"></input>
-          <span class="add-on">
-            <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-          </span>
         </div>
--->
 
-<!-- BH original DatePicker row in table of insurance parameters (drop-down calendar)
+    
+        <div class="row-fluid">
+            <div class="span4"><label class="control-label form-label" for="id_amount">AMOUNT TO INSURE &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+            <div class="span3"><input class="controls input-append input-medium" type="text" name="amount" id="id_amount" value="{{trgAmount}}"></div>
+            <div class="span5 blue">Minimum: 0.1 &nbsp;&nbsp;&nbsp;&nbsp; Maximum: 1 bitcoin</p></div>
+        </div>
+    
+        <div class="row-fluid">
+            <div class="span4"><label class="form-control control-label form-label" for="id_address">YOUR BITCOIN ADDRESS &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+            <div class="span6"><input class="controls input-append input-medium" type="text" name="address" id="id_address"></div>
+        </div>
+        
+    </form>
 
-	<div class="row-fluid">
-		<div class="span4"><label class="control-label form-label" for="id_date">EXPIRY DATE &nbsp;&nbsp;&nbsp;&nbsp;</label>
-		</div>
-		<div class="span6 controls input-append date" id="dp" data-date="{{date}}" data-date-format="yyyy-mm-dd">
-			<input type="text" class="input-medium" name="date" id="id_date" value="{{date}}">
-			<span class="add-on"><i class="icon-calendar"></i></span>
-		</div>
-	</div>
--->
 
-	<div class="row-fluid">
+    <div class="info">
+        <label class="control-label blue" for="id_fee"><br><b>INSURANCE FEE:</b></label>
+        <div class="controls blue" id="id_fee" name="fee">BTC &nbsp; {{fee}}</div>
+        <div class="controls blue" id="id_fee_usd" name="fee_usd">USD &nbsp; {{fee_usd}}</div>
+    </div>
 
-	    <div class="span4"><label class="control-label form-label" for="id_amount">AMOUNT TO INSURE &nbsp;&nbsp;&nbsp;&nbsp;</label>
-	    </div>
+    <br><button type="submit" class="btn btn-primary" onclick="return submit_and_countdown()">Place Order</button><br><br>
 
-	    <div class="span3"><input class="controls input-append input-medium" type="text" name="amount" id="id_amount" value="{{trgAmount}}">
-		</div>
-
-		<div class="span5 blue">Minimum: 0.1 &nbsp;&nbsp;&nbsp;&nbsp; Maximum: 1 bitcoin</p>
-		</div>
-
-	</div>
-
-	<div class="row-fluid">
-		<div class="span4"><label class="form-control control-label form-label" for="id_address">YOUR BITCOIN ADDRESS &nbsp;&nbsp;&nbsp;&nbsp;</label>
-		</div>
-		<div class="span6"><input class="controls input-append input-medium" type="text" name="address" id="id_address">
-		</div>
-	</div>
-</form>
-
-<div class="info">
-	<label class="control-label blue" for="id_fee"><br><b>INSURANCE FEE</b>&nbsp; (bitcoins)<b>:</b></label>
-    <div class="controls blue" id="id_fee" name="fee">{{fee}}</div>
-    <div id="id_testdate"> </div>
 </div>
 
-<br><button type="submit" class="btn btn-primary" onclick="return submit_and_countdown()">Place Order</button><br><br>
-</div>
 <!------------------------------------------------------------------------------>
 
 <div id="submit_confirm" class="submit-confirm">
@@ -143,7 +119,9 @@
 </script>
 
 
+
 <script>
+
     function refreshFee() {
         var form = $('#contractForm');
 
@@ -171,9 +149,10 @@
     function validateForm() {
         var message = "";
 
-        // date
+        // expiry
         var dvalue = document.getElementById('id_date').value;
-        if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+        //~ if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+        if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}$/)) {
             var dt = new Date(dvalue);
             var today = new Date()
             if(dt < today)
@@ -184,7 +163,7 @@
                 message += "Date should be within 7 days from today!\n";
         }
         else
-            message += "Not a YYYY-MM-DD format date: '" + dvalue + "'\n";
+            message += "Expiry must be given as YYYY-MM-DD HH:MM: '" + dvalue + "'\n";
 
         // amount
         var amount = document.getElementById('id_amount').value
