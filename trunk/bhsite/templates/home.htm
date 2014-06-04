@@ -98,13 +98,14 @@
 	<div class="btc_address_our">
 	    <section id="id_bh_address">
 	        <div id="btc_addr_our"><b>Pay the insurance fee within 5 minutes to this bitcoin address:</b>
-		        <span id="id_address_our">a</span>
-		        <br>Otherwise, your order will be cancelled.
+		        <span id="id_address_our">a</span>   <br>Otherwise, your order will be cancelled.
 		    </div>
 	    </section>
 	</div>
 
-	<br>You can <a href="/future/query/">check status of your order</a> by using order ID: &nbsp;<span id="order_id" class="controls blue bold"></span>
+	<br>
+    You can <a href="/future/query/">check status of your order</a>
+    by using order ID: &nbsp; <span id="order_id" class="controls blue bold"></span>
 
 	<hr>
 
@@ -113,8 +114,8 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $("#id_bh_address").hide();
-        $("#submit_confirm").hide();
+        $("#id_bh_address").hide()
+        $("#submit_confirm").hide()
     })
 </script>
 
@@ -151,7 +152,7 @@
 
         // expiry
         var dvalue = document.getElementById('id_date').value;
-        //~ if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2}$/)) {
+        
         if(dvalue.match(/^\d{4}-\d{1,2}-\d{1,2} \d{2}:\d{2}$/)) {
             var dt = new Date(dvalue);
             var today = new Date()
@@ -206,6 +207,8 @@
                 $("#ord_exp_time").text(data.ord_exp_time);
                 $("#order_id").text(data.order_id);
                 $("#id_address_our").text(data.address);
+            
+                $("#order_id").show();
                 $("#id_bh_address").show();
                 $("#submit_confirm").show();
             },
@@ -217,28 +220,19 @@
         return true;
     }
 
-    $('#dp').datepicker().on('changeDate', function(ev){refreshFee()});
+    $('#datetimepicker').datetimepicker().on('changeDate', function(ev){refreshFee()});
+//  $('#dp').datepicker().on('changeDate', function(ev){refreshFee()});  # datepicker - to be removed
     $('#id_amount, #id_date').on('input', function() {refreshFee()});
 
 </script>
 
 <!----------------------  DateTimePicker  ------------------------------------------------------->
-<!--
-<div id="datetimepicker" class="input-append date">
-  <input type="text"></input>
-  <span class="add-on">
-    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-  </span>
-</div>
--->
 <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script> 
 <script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>
+<!-- <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>  -->
 
-<script type="text/javascript">
-  $('#datetimepicker').datetimepicker({ format: 'yyyy-MM-dd hh:mm', language: 'en-US' });
-</script>
+<script type="text/javascript">  $('#datetimepicker').datetimepicker({ format: 'yyyy-MM-dd hh:mm', language: 'en-US' }); </script>
 
 
 {% endblock content %}
