@@ -12,6 +12,7 @@ Alternatively, install SciPy and NumPy from distribution provided packages (for 
 ### Install BHSDK
 
     cd bhsdk
+    workon bh
     pip install . # note trailing dot
 
 `~/bhsdk-config/` will be created.
@@ -49,8 +50,8 @@ Add to `server{}` block of `nginx.conf`:
 Adjust `root` appropriately.
 Edit `trunk/uwsgi.ini` and set `home=` to the path to _bh_ virtualenv. Then,
 
-    workon bh
     cd trunk
+    workon bh
     uwsgi --ini uwsgi.ini
 
-The website is ready at http://localhost/future/
+The website is ready at [/future/](http://localhost/future/).
