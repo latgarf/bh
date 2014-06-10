@@ -48,6 +48,8 @@ coverage.xml
 # Django stuff:
 *.log
 *.pot
+uwsgi.pid
+btc.db
 
 # Sphinx documentation
 docs/_build/

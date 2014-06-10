@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from os import getenv
 from distutils.core import setup
 
 setup(name='bhsdk',
@@ -10,5 +11,5 @@ setup(name='bhsdk',
     url='',
     package_dir={'bhsdk': 'src'},
     packages=['bhsdk', 'bhsdk.rates'],
-    data_files=[('/etc/bhsite/', ['etc/bhsite/bhsite.conf'])]
+    data_files=[(getenv('HOME') + '/bhsdk-config/', ['bhsite.conf'])]
     )

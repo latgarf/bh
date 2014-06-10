@@ -1,8 +1,9 @@
 import configparser
 import logging
 import logging.config
+from os import getenv
 
-CONFIG_FILE='/etc/bhsite/bhsite.conf'
+CONFIG_FILE = getenv('HOME') + '/bhsdk-config/bhsite.conf'
 config = configparser.SafeConfigParser()
 config.read(CONFIG_FILE)
 
