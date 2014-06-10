@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': r'/usr/share/btc_hedge/sqlitedb/btc.db',                      # Or path to database file if using sqlite3.
+        'NAME': r'../btc.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -120,10 +120,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'bhsite',
     'api',
-    
+
     # 'django.contrib.admin',       # Uncomment to enable admin:
     # 'django.contrib.admindocs',   # Uncomment to enable admin documentation:
 )
