@@ -16,6 +16,7 @@ Alternatively, install SciPy and NumPy from distribution provided packages (for 
     pip install . # note trailing dot
 
 `~/bhsdk-config/` will be created.
+Also install [bitcoind](https://bitcoin.org/en/download). 
 
 ### Setup Nginx and start Django
 
