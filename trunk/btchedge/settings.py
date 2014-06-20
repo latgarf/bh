@@ -1,7 +1,8 @@
 # Django settings for btchedge project.
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG_PROPAGATE_EXCEPTIONS = True
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -144,6 +145,10 @@ LOGGING = {
         }
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -152,9 +157,13 @@ LOGGING = {
     },
     'loggers': {
         'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
             'propagate': True,
         },
+        'myproject.custom': {
+            'handlers': ['console'],
+            'level': 'INFO'
+        }
     }
 }
