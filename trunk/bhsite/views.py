@@ -35,35 +35,31 @@ def future(request):
     form = SubmitForm(request.POST)
 
     if form.is_valid():
-        
         address_bh = bs.get_new_address()
         rate=form.cleaned_data['rate']
-        date=form.cleaned_data['date']
-        expiry=form.cleaned_data['expiry']  # AT 2014-05-09
+        expiry=form.cleaned_data['expiry']
         product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
         trgAmount = form.cleaned_data['amount']
         srcAmount = round(trgAmount * rate, 8)
         fee = getPremium(rate, expiry, trgAmount, product_id)
-        
+
         filterargs = {
             'time_expiry': to_epoch_str(getExpiryTime(expiry)),
-#           'time_expiry': to_epoch_str(getExpiryTime(date)),
             'amount_ordered': trgAmount,
             'addr_user': form.cleaned_data['address'],
             'rate': rate,
             'product_id': prod_str(product_id)
         }
-        
+
         duplicated = False
         query_id = gen_query_id()
         print(query_id)
-        
+
         records = Transaction.objects.filter(**filterargs)
         if len(records) > 0:
             duplicated = True
         else:
             time_expiry = to_epoch_str(getExpiryTime(expiry))
-#           time_expiry = to_epoch_str(getExpiryTime(date))
             r = Transaction.objects.create(
                 time_expiry = time_expiry,
                 product_id = prod_str(product_id),
@@ -80,7 +76,7 @@ def future(request):
 
         ord_exp_time = utc_now() + datetime.timedelta(seconds=int(config.get('orders', 'order_exp_seconds')))
         print(ord_exp_time)
-        
+
         ret = {
             'duplicated': duplicated,
             'ord_exp_time': ord_exp_time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -90,7 +86,6 @@ def future(request):
 
         ret_json = json.dumps(ret)
         return HttpResponse(ret_json, mimetype="application/json")
-
 
     # default values
     rate = get_realtime_rate()

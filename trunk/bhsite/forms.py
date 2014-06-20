@@ -13,8 +13,8 @@ class HomeForm(forms.Form):
     select_direction = forms.ChoiceField(choices=[(0, 'Decrease'), (1, 'Increase')])
 
 class SubmitForm(forms.Form):
-    date = forms.DateField(input_formats=[
-        '%Y-%m-%d',       # '2006-10-25'
+    expiry = forms.DateTimeField(input_formats=[
+        '%Y-%m-%d %H:%M', # '2006-10-25 23:10'
         '%m/%d/%Y',       # '10/25/2006'
         '%m/%d/%y',
         '%d.%m.%y',
