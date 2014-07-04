@@ -1,8 +1,8 @@
 from django import forms
 
 class HomeForm(forms.Form):
-    date = forms.DateField(input_formats=[
-        '%Y-%m-%d',       # '2006-10-25'
+    expiry = forms.DateField(input_formats=[
+        '%Y-%m-%d %H:%M', # '2006-10-25 23:10'
         '%m/%d/%Y',       # '10/25/2006'
         '%m/%d/%y',
         '%d.%m.%y',

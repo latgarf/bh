@@ -220,19 +220,20 @@
         return true;
     }
 
-    $('#datetimepicker').datetimepicker().on('changeDate', function(ev){refreshFee()});
-//  $('#dp').datepicker().on('changeDate', function(ev){refreshFee()});  # datepicker - to be removed
-    $('#id_amount, #id_expiry').on('input', function() {refreshFee()});
+    $('#id_amount, #id_expiry').change(refreshFee);
 
 </script>
 
 <!----------------------  DateTimePicker  ------------------------------------------------------->
-<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
-<!-- <script type="text/javascript" src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>  -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js"></script>
+<!-- <script type="text/javascript" src="//tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>  -->
 
-<script type="text/javascript">  $('#datetimepicker').datetimepicker({ format: 'yyyy-MM-dd hh:mm', language: 'en-US' }); </script>
+<script type="text/javascript">
+    $('#datetimepicker').datetimepicker({ format: 'yyyy-MM-dd hh:mm', language: 'en-US' });
+    $('#datetimepicker').datetimepicker().on('changeDate', refreshFee);
+</script>
 
 
 {% endblock content %}

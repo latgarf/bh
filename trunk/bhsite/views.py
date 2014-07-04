@@ -119,7 +119,7 @@ def premium(request):
     form = HomeForm(request.POST)
     if form.is_valid():
         trade_amount=form.cleaned_data['amount']
-        closing_date=form.cleaned_data['date']
+        closing_date=form.cleaned_data['expiry']
         rate = form.cleaned_data['rate']
         direction = int()
         product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
