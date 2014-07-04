@@ -41,13 +41,21 @@ As _bh_ user, create bitcoin config, start the service, and check it is running:
 
 ### Setup Python environment
 
-Install Python 3, `python-virtualenv`, and `virtualenvwrapper`. Then,
+Install Python 3, `python-virtualenv`, and `virtualenvwrapper`:
+
+    pacman -S python python-virtualenvwrapper
+
+On Arch Linux, add to `~/.bashrc`:
+
+    . /usr/bin/virtualenvwrapper.sh
+
+Then,
 
     mkvirtualenv -p /usr/bin/python3 bhpy
     workon bhpy
     pip install numpy scipy django uwsgi
 
-You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` packages for SciPy to compile.
+You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` (Ubuntu); `blas`, `lapack`, `gcc-fortran` (Arch Linux) packages for SciPy to compile.
 Alternatively, install SciPy and NumPy from distribution provided packages (for Python 3!) and supply `--system-site-packages` to mkvirtualenv.
 
 ### Install BHSDK
