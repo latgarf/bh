@@ -1,9 +1,50 @@
+### Dedicated OS user
+
+Optionally, create an OS user dedicated to running the software (as root):
+
+    pacman -S sudo
+    groupadd -r sudo
+    useradd -m -s /bin/bash -G sudo bh
+
+Edit `/etc/sudoers` to enable _sudo_ group to use `sudo`.
+
+### Install Bitcoin client
+
+Install Bitcoin Daemon software and make it run at system startup (as root):
+    
+    pacman -S bitcoin-daemon
+    cat >/etc/systemd/system/bitcoind.service <<EOF
+    [Unit]
+    Description=Bitcoin daemon
+
+    [Service]
+    User=bh
+    Type=forking
+    PIDFile=/home/bh/.bitcoin/bitcoind.pid
+    ExecStart=/usr/bin/bitcoind -daemon
+    ExecStop=/usr/bin/bitcoind stop
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+As _bh_ user, create bitcoin config, start the service, and check it is running:
+
+    cat >~/.bitcoin/bitcoin.conf <<EOF
+    rpcuser=bitcoinrpc
+    rpcpassword=AR3pgfhfggfhhgfh54ydaeRHgj89sq4wsfdd
+    EOF
+    chmod 600 ~/.bitcoin/bitcoin.conf
+    sudo systemctl start bitcoind
+    sudo systemctl status bitcoind
+    bitcoind listaccounts # give it up to 1min to start
+
 ### Setup Python environment
 
 Install Python 3, `python-virtualenv`, and `virtualenvwrapper`. Then,
 
-    mkvirtualenv -p /usr/bin/python3 bh
-    workon bh
+    mkvirtualenv -p /usr/bin/python3 bhpy
+    workon bhpy
     pip install numpy scipy django uwsgi
 
 You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` packages for SciPy to compile.
@@ -12,7 +53,7 @@ Alternatively, install SciPy and NumPy from distribution provided packages (for 
 ### Install BHSDK
 
     cd bhsdk
-    workon bh
+    workon bhpy
     pip install . # note trailing dot
 
 `~/bhsdk-config/` will be created.
@@ -49,10 +90,11 @@ Add to `server{}` block of `nginx.conf`:
     }
 
 Adjust `root` appropriately.
-Edit `trunk/uwsgi.ini` and set `home=` to the path to _bh_ virtualenv. Then,
+Edit `trunk/uwsgi.ini` and set `home=` to the path to _bhpy_ virtualenv. Then,
 
     cd trunk
-    workon bh
+    workon bhpy
+    ./manage.py syncdb
     uwsgi --ini uwsgi.ini
 
 The website is ready at [/future/](http://localhost/future/).
