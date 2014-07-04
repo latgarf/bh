@@ -5,7 +5,7 @@ from bhsdk import bitcoind
 from bhsdk.time import now_epoch_str
 from bhsdk.enums import TransactionStatus as TS
 from bhsdk.pricing import calculate_payment
-from bhsdk.rates import get_rate
+from bhsdk.rates import get_realtime_rate
 from bhsdk import logger_payments as logger
 import sqlite3
 import json
@@ -36,9 +36,9 @@ def auto_pay(do_pay):
     bs = bitcoind.BitcoindService()
     c.execute(query)
     orders = c.fetchall()
+    rate_exp = get_realtime_rate()
     for pid, uid, addr, amount, rate_i in orders:
         total +=1
-        rate_exp = get_rate()
         amount_paid = calculate_payment(rate_exp, rate_i, amount, int(pid))
         # Dry run
         if not do_pay:
