@@ -10,7 +10,7 @@ Edit `/etc/sudoers` to enable _sudo_ group to use `sudo`.
 
 ### Install Bitcoin client
 
-Install Bitcoin Daemon software and make it run at system startup (as root):
+Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it run at system startup (as root):
     
     pacman -S bitcoin-daemon
     cat >/etc/systemd/system/bitcoind.service <<EOF
@@ -58,14 +58,19 @@ Then,
 You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` (Ubuntu); `blas`, `lapack`, `gcc-fortran` (Arch Linux) packages for SciPy to compile.
 Alternatively, install SciPy and NumPy from distribution provided packages (for Python 3!) and supply `--system-site-packages` to mkvirtualenv.
 
+### Sources
+
+Clone the repository into `~/bh`:
+
+    git clone git@github.com:latgarf/bh.git ~/bh
+
 ### Install BHSDK
 
-    cd bhsdk
+    cd ~/bh/bhsdk
     workon bhpy
     pip install . # note trailing dot
 
 `~/bhsdk-config/` will be created.
-Also install [bitcoind](https://bitcoin.org/en/download). 
 
 ### Setup Nginx and start Django
 
@@ -100,9 +105,19 @@ Add to `server{}` block of `nginx.conf`:
 Adjust `root` appropriately.
 Edit `trunk/uwsgi.ini` and set `home=` to the path to _bhpy_ virtualenv. Then,
 
-    cd trunk
+    cd ~/bh/trunk
     workon bhpy
     ./manage.py syncdb
     uwsgi --ini uwsgi.ini
 
 The website is ready at [/future/](http://localhost/future/).
+
+### Payment processing
+
+Setup periodic execution of payment processing scripts:
+
+    crontab - <<EOF
+    MAILTO=your@email.tld
+    */2 * * * * cd $HOME/bh/bitcoind && ./fetch_bitstamp_history.py
+    */1 * * * * cd $HOME/bh/bitcoind && ./paymentchecker.py && ./autopay.py --pay
+    EOF
