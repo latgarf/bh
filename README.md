@@ -91,6 +91,7 @@ Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it
 
 As _bh_ user, create bitcoin config, start the service, and check it is running:
 
+    mkdir ~/.bitcoin/
     cat >~/.bitcoin/bitcoin.conf <<EOF
     rpcuser=bitcoinrpc
     rpcpassword=AR3pgfhfggfhhgfh54ydaeRHgj89sq4wsfdd
