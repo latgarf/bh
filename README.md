@@ -180,6 +180,6 @@ Setup periodic execution of payment processing scripts:
 
     crontab - <<EOF
     MAILTO=your@email.tld
-    */2 * * * * cd $HOME/bh/bitcoind && ./fetch_bitstamp_history.py
-    */1 * * * * cd $HOME/bh/bitcoind && ./paymentchecker.py && ./autopay.py --pay
+    */2 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./fetch_bitstamp_history.py
+    */1 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./paymentchecker.py && ./autopay.py --pay
     EOF
