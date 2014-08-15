@@ -1,28 +1,89 @@
-### Dedicated OS user
+##	ArchLinux Install
 
-Optionally, create an OS user dedicated to running the software (as root):
+### Disable ping responses
 
-    pacman -S sudo
-    groupadd -r sudo
-    useradd -m -s /bin/bash -G sudo bh
+	# echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+	
+	To re-enable ping request:
+	# echo "0" > /proc/sys/net/ipv4/icmp_echo_ignore_all
+	Or:
+	"net.ipv4.icmp_echo_ignore_all = 1" >> /etc/sysctl.conf
 
-Edit `/etc/sudoers` to enable _sudo_ group to use `sudo`.
+### Change ssh port (from default 22)
+
+    Edit /etc/ssh/sshd_config
+	#Port 22122
+
+    # systemctl restart sshd
+
+
+##	Users & Groups: Create & Configure
+
+    # groupadd -r sudo
+	# nano /etc/sudoers   # to enable members of group sudo to use sudo.
+
+	# useradd -m -g users -G sudo wheel -s /bin/bash tobin
+	# passwd tobin
+	
+	ssh tobin@server.tld
+	
+	Test that user tobin can do anything with sudo, e.g. touch /root/somefile
+
+###	Enable key-based authentication
+
+    On local machine:
+	$ ssh-keygen -t ecdsa -b 521
+	
+	Copy pubkey to remote server:
+	$ scp -P 22122 ~/.ssh/id_ecdsa.pub root@212.71.235.160:
+	
+	On remote server, append your pubkey to file  ~/.ssh/authorized_keys
+	$ ssh username@remote-server.org
+	$ mkdir ~/.ssh
+	$ cat ~/id_ecdsa.pub >> ~/.ssh/authorized_keys
+	$ rm ~/id_ecdsa.pub
+	$ chmod 600 ~/.ssh/authorized_keys
+
+### Disable remote root login
+
+	Edit /etc/ssh/sshd_config
+	#PermitRootLogin no
+	
+	# systemctl restart sshd
+
+	# gpasswd -d root wheel
+
+### Disable password-based authentication
+
+
+##	Dedicated OS user bh for running the software:
+
+	# groupadd bh
+	# useradd -m -g bh -G sudo -s /bin/bash bh
+	
 
 ### Install Bitcoin client
 
 Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it run at system startup (as root):
     
     pacman -S bitcoin-daemon
+    
+    https://wiki.archlinux.org/index.php/bitcoin#Installation
+    Systemd service file:
+    
     cat >/etc/systemd/system/bitcoind.service <<EOF
     [Unit]
-    Description=Bitcoin daemon
-
+    Description=Bitcoin daemon service
+	After=network.target
+	
     [Service]
     User=bh
     Type=forking
     PIDFile=/home/bh/.bitcoin/bitcoind.pid
     ExecStart=/usr/bin/bitcoind -daemon
     ExecStop=/usr/bin/bitcoind stop
+	Restart=always
+	KillSignal=SIGQUIT
 
     [Install]
     WantedBy=multi-user.target

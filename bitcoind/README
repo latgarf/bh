@@ -1,14 +1,9 @@
-
-# fetch historical data from bitstamp
-# runs every minute
+# fetch historical data from bitstamp (runs every minute)
 */1 * * * * <path_to_script>/fetch_bitstamp_history.py
 
 # autopay runs at 22:00 each to pay expired orders
 # omit --pay option for a dry run
 0 22 * * * <path_to_script>/autopay.py --pay
 
-
-
-# check payments from user and cancel expired unpaid orders
-# runs every minute
+# check payments from user and cancel expired unpaid orders (runs every minute)
 */1 * * * <path_to_script>/paymentchecker.py

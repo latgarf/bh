@@ -157,11 +157,11 @@
             var dt = new Date(dvalue);
             var today = new Date()
             if(dt < today)
-                message += "Date should be no earlier than today!\n";
+                message += "Expiry date should be no earlier than today!\n";
 
             today.setDate(today.getDate()+7)
             if(dt > today)
-                message += "Date should be within 7 days from today!\n";
+                message += "Expiry date should be within 7 days from today!\n";
         }
         else
             message += "Expiry must be given as YYYY-MM-DD HH:MM: '" + dvalue + "'\n";
