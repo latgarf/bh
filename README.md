@@ -93,6 +93,7 @@ Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it
 
 As _bh_ user, create bitcoin config, start the service, and check it is running:
 
+    mkdir ~/.bitcoin/
     cat >~/.bitcoin/bitcoin.conf <<EOF
     rpcuser=bitcoinrpc
     rpcpassword=AR3pgfhfggfhhgfh54ydaeRHgj89sq4wsfdd
@@ -181,6 +182,6 @@ Setup periodic execution of payment processing scripts:
 
     crontab - <<EOF
     MAILTO=your@email.tld
-    */2 * * * * cd $HOME/bh/bitcoind && ./fetch_bitstamp_history.py
-    */1 * * * * cd $HOME/bh/bitcoind && ./paymentchecker.py && ./autopay.py --pay
+    */2 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./fetch_bitstamp_history.py
+    */1 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./paymentchecker.py && ./autopay.py --pay
     EOF
