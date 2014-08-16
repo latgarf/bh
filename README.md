@@ -33,11 +33,13 @@
 
     On local machine:
 	$ ssh-keygen -t ecdsa -b 521
+	$ ssh-copy-id -i ~/.ssh/id_ecdsa.pub bh@178.79.185.250
+
 	
-	Copy pubkey to remote server:
+    Or copy pubkey to remote server:
 	$ scp -P 22122 ~/.ssh/id_ecdsa.pub root@212.71.235.160:
-	
-	On remote server, append your pubkey to file  ~/.ssh/authorized_keys
+
+	Then, on remote server, append your pubkey to file  ~/.ssh/authorized_keys
 	$ ssh username@remote-server.org
 	$ mkdir ~/.ssh
 	$ cat ~/id_ecdsa.pub >> ~/.ssh/authorized_keys
