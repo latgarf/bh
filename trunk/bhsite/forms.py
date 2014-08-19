@@ -1,18 +1,14 @@
 from django import forms
 
 class HomeForm(forms.Form):
-    expiry = forms.DateTimeField(input_formats=[
-        '%Y-%m-%d %H:%M', # '2006-10-25 23:10'
-    ])
+    expiry = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
     amount 	= forms.FloatField()
     rate 	= forms.FloatField()
     address = forms.CharField(max_length=35, required=False)
     select_direction = forms.ChoiceField(choices=[(0, 'Decrease'), (1, 'Increase')])
 
 class SubmitForm(forms.Form):
-    expiry = forms.DateTimeField(input_formats=[
-        '%Y-%m-%d %H:%M', # '2006-10-25 23:10'
-    ])
+    expiry 	= forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M'])
     amount 	= forms.FloatField()
     rate 	= forms.FloatField()
     address = forms.CharField(max_length=35)

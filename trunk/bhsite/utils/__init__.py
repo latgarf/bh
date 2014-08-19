@@ -10,10 +10,11 @@ def getAmount():
     return 1.0
 
 def getExpiryTime(date):
-    hm = config.get('orders',  'order_exp_time').split(':')
-    hr = int(hm[0])
-    min = int(hm[1])
-    exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=hr, minutes=min)
+    exp_time = date
+    #hm = config.get('orders',  'order_exp_time').split(':')
+    #hr = int(hm[0])
+    #min = int(hm[1])
+    #exp_time = datetime.datetime(date.year, date.month, date.day) + datetime.timedelta(hours=hr, minutes=min)
     return exp_time
 
 def getIP(request):
