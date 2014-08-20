@@ -2,7 +2,7 @@
 Description=uwsgi bh site
 
 [Service]
-ExecStart=/usr/bin/uwsgi --ini /var/www/bh/trunk/uwsgi.ini --py-autoreload=3
+ExecStart=/usr/bin/uwsgi --ini /home/bh/bh/trunk/uwsgi.ini --py-autoreload=3
 Restart=always
 KillSignal=SIGQUIT
 

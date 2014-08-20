@@ -56,15 +56,15 @@
 	# gpasswd -d root wheel
 
 ### Disable password-based authentication
-
-
-##	Dedicated OS user bh for running the software:
+    ...
+    
+###	Dedicated user bh for running bh software:
 
 	# groupadd bh
 	# useradd -m -g bh -G sudo -s /bin/bash bh
-	
 
-### Install Bitcoin client
+
+## Install Bitcoin client
 
 Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it run at system startup (as root):
     
@@ -103,9 +103,10 @@ As _bh_ user, create bitcoin config, start the service, and check it is running:
     sudo systemctl status bitcoind
     bitcoind listaccounts # give it up to 1min to start
 
-### Setup Python environment
 
-Install Python 3, `python-virtualenv`, and `virtualenvwrapper`:
+## Setup Python environment
+
+Install Python 3, `python-virtualenv`, `virtualenvwrapper`:
 
     pacman -S python python-virtualenvwrapper
 
@@ -122,13 +123,13 @@ Then,
 You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` (Ubuntu); `blas`, `lapack`, `gcc-fortran` (Arch Linux) packages for SciPy to compile.
 Alternatively, install SciPy and NumPy from distribution provided packages (for Python 3!) and supply `--system-site-packages` to mkvirtualenv.
 
-### Sources
 
-Clone the repository into `~/bh`:
+## Clone Git repo
 
     git clone git@github.com:latgarf/bh.git ~/bh
 
-### Install BHSDK
+
+## Install BHSDK
 
     cd ~/bh/bhsdk
     workon bhpy
@@ -136,7 +137,8 @@ Clone the repository into `~/bh`:
 
 `~/bhsdk-config/` will be created.
 
-### Setup Nginx and start Django
+
+## Setup Nginx
 
 Create `/etc/nginx/uwsgi_params` if absent:
 
@@ -167,21 +169,44 @@ Add to `server{}` block of `nginx.conf`:
     }
 
 Adjust `root` appropriately.
-Edit `trunk/uwsgi.ini` and set `home=` to the path to _bhpy_ virtualenv. Then,
+
+
+## Configure uwsgi
+
+Edit `trunk/uwsgi.ini`:
+
+	[uwsgi]
+	master=true
+	socket=127.0.0.1:8011
+	#daemonize=%d/../uwsgi.log
+	pidfile=%d/../uwsgi.pid
+	home=/home/bh/.virtualenvs/bhpy
+	chdir=%d
+	module=btchedge.wsgi:application
+	processes=1
+	threads=1
+	#buffer-size=32768
+
+
+## Start uwsgi, Django
 
     cd ~/bh/trunk
     workon bhpy
     ./manage.py syncdb
     uwsgi --ini uwsgi.ini
 
-The website is ready at [/future/](http://localhost/future/).
 
-### Payment processing
+## Website is ready at  [/future/](http://localhost/future/)
+
+
+## Payment processing
 
 Setup periodic execution of payment processing scripts:
 
     crontab - <<EOF
     MAILTO=your@email.tld
-    */2 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./fetch_bitstamp_history.py
     */1 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./paymentchecker.py && ./autopay.py --pay
+    # */2 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./fetch_bitstamp_history.py
     EOF
+
+----------------------------------------------------------------------------
