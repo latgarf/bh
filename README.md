@@ -163,7 +163,7 @@ Add to `server{}` block of `nginx.conf`:
         uwsgi_pass  127.0.0.1:8011;
     }
     location /static {
-        root  /home/arkadi/bh/trunk/bhsite;
+        root  /home/bh/bh/trunk/bhsite;
     }
 
 Adjust `root` appropriately.
