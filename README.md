@@ -195,6 +195,15 @@ Edit `trunk/uwsgi.ini`:
     ./manage.py syncdb
     uwsgi --ini uwsgi.ini
 
+## ?! Manually create DB table transaction_ids ?
+
+	sqlite> CREATE TABLE "transaction_ids" (
+    "order_id" varchar(32) NOT NULL PRIMARY KEY,
+    "transaction_id" varchar(64) NOT NULL
+	);
+
+	There's probably a better way to do it - update this section if you know how!
+	bitcoind/bhdb_schema.sql
 
 ## Website is ready at  [/future/](http://localhost/future/)
 
