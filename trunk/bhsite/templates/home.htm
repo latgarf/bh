@@ -79,10 +79,10 @@
     </form>
 
 
-    <div class="info">
-        <label class="control-label blue" for="id_fee"><br><b>INSURANCE FEE:</b></label>
-        <div class="controls blue" id="id_fee" name="fee">BTC &nbsp; {{fee}}</div>
-        <div class="controls blue" id="id_fee_usd" name="fee_usd">USD &nbsp; {{fee_usd}}</div>
+    <div class="info blue">
+        <label class="control-label" for="id_fee"><br><b>INSURANCE FEE:</b></label>
+        <div class="controls">BTC &nbsp; <span id="id_fee" name="fee">{{fee}}</span></div>
+        <div class="controls">USD &nbsp; <span id="id_fee_usd" name="fee_usd">{{fee_usd}}</span></div>
     </div>
 
     <br><button type="submit" class="btn btn-primary" onclick="return submit_and_countdown()">Place Order</button><br><br>
