@@ -1,14 +1,41 @@
 {% extends 'base.htm' %}
 {% block content %}
 
-<h1>How Insurance from Bitcoin Volatility Works:<br><br></h1>
+<br><h1>How Insurance from Bitcoin Volatility Works:</h1><br>
 
-1. Specify insurance parameters (contract expiry date, increase or decrease in bitcoin rate, etc.)<br><br>
-2. Specify the size of your order. That is, the amount of bitcoins you want to insure.<br><br>
-3. Provide your bitcoin address to which we will send our future payment to you.<br><br>
-4. Pay your insurance fee using your bitcoins.<br><br>
-5. You will receive insurance payment shortly after the contract expires.<br><br>
+<big>
+<ol>
+	<li><b>Specify insurance parameters</b><br>
+		(expiry, size, and whether to protect from increase or decrease in bitcoin rate)</li><br>
+	
+	<li><b>Provide your bitcoin address.</b> Your insurance payout will be sent there upon expiry.</li><br>
+	
+	<li><b>Press "Submit Order" button.</b><br>
+		Our bitcoin address will be displayed as a result.</li><br>
+		
+	<li><b>Make your fee payment to our address within 5 minutes</b><br>
+		(otherwise, your order will be cancelled).<br>
+		If you pay a differen amount than the quote, your order will still be opened, but the size will be adjusted proportionally.<br>
+		For example, if the fee quoted to you for insuring 1 bitcoin was 0.02, but you have paid only 0.01,<br>
+		then a contract to ensure only 0.5 bitcoins will be opened.</li><br>
+	
+	<li><b>After your contract expires</b><br>
+		If a payment is due to you,	it will be sent to your bitcoin address within a minute.</li>
+</ol>
+</big>
 
+<hr>
+
+<h3>Use Cases</h3>
+<big>
+<ul>
+	<li><b>Bitcoin holders</b> protect their savings.</li>
+	<li><b>Bitcoin debtors</b> protect against increase in bitcoin price to repay debt.<br>
+	<li><b>Speculators</b> try to buy insurance cheaply and receive a large payout.<br><br></h4>
+</ul>
+</big>
+
+<!--
 <br><br>
 <h3>Example:</h3>
 
@@ -31,40 +58,5 @@ and copies his bitcoin address where he wants to receive insurance payment at ex
 <br><br>	
 <br>2013-10-30 16h	205.00
 <br>2013-10-31 21h	202.30
-
-<br><br>
-<h3>For advanced users:  </h3>
-This insurance is intended to be equivalent to your long position in an at-the-money option.
-The option expires at 21h00 UTC on your chosen date.
-The option's underlying is the 24-hour volume-weighted average BTC/USD rate from Bitstamp.
-The rate at which the option is struck is determined at the moment when your payment is received.
-<br><br><br>
-
-
-<hr>
-
-<h1>Frequently Asked Questions<br><br></h1>
-	1. How do you determine the rate at which my insurance contract is opened and closed?<br><br>
-	
-		...
-		<br><br><br>
-	
-	2. ...
-<br><br><br>
-
-
-<h1>Examples of Usage <br><br></h1>
-	
-
-<h4>Example:  Protect Bitcoin Savings <br><br></h4>
-
-
-<h4>Example:  Bitcoin Debtor <br><br></h4>
-
-
-<h4>Example:  Speculator<br><br></h4>
-	
-	
-	
-<hr>
+-->
 {% endblock content %}

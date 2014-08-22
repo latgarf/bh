@@ -41,14 +41,12 @@
 <body>
 {% block header_wrapper %}
 	<div class="band"></div>
-	<div class="main-menu">
-		&nbsp;&nbsp;&nbsp;
+	<div class="main-menu">&nbsp;&nbsp;&nbsp;
 		<a href="/future/">Home</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 		<a href="/future/how_it_works/">How It Works</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 	    <a href="/future/query/">Check Existing Order</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 	    <!-- <a href="/future/options/">Options</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; -->
 	    <!-- <a href="/future/futures/">Futures</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; -->
-	    <a href="/future/investors/">Investors</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 		<!-- <a href="/future/faq/">24-Hour Average Rate:</a> $<span>{{ma_rate}}</span>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; -->
 		<a href="https://bitstamp.net">Bitcoin Price:</a> $<span name="rate" id="id_rate">{{rate}}</span>
 	</div>
@@ -65,7 +63,8 @@
 		{% block footer %}
 			&nbsp;&nbsp;&nbsp;
 			<a href="/future/faq/">FAQ</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-			<a href="/future/contact/">Contact</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="/future/investors/">Investors</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+			<a href="mailto:kanom@gmx.us">Contact</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 		{% endblock footer %}
 	</footer>
 	<div class="band"></div>

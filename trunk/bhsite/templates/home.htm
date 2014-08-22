@@ -1,14 +1,27 @@
 {% extends 'base.htm' %}
+
 {% block content %}
 <style>
+	.row-fluid .span1 {margin:10px 0 10px;}
+	.row-fluid .span2 {margin:10px 0 10px;}
 	.row-fluid .span3 {margin:10px 0 10px;}
 	.row-fluid .span4 {margin:10px 0 10px;}
 	.row-fluid .span5 {margin:10px 0 10px;}
 	.row-fluid .span6 {margin:10px 0 10px;}
+	.row-fluid .span7 {margin:10px 0 10px;}
+	.row-fluid .span8 {margin:10px 0 10px;}
+	.row-fluid .span9 {margin:10px 0 10px;}
+	.row-fluid .span10 {margin:10px 0 10px;}
+	.row-fluid .span11 {margin:10px 0 10px;}
+	.row-fluid .span12 {margin:10px 0 10px;}
 
 	.form-label {font-size: 1.2em; font-weight:800; color:#2a9cc1;}
 	.form-actions {float:right; padding-top:0; background:none; border:none;}
 	.form-inline-text {margin-top:5px; h4 {padding-left:20px;}}
+
+	.fee-label  {font-size: 1.2em; font-weight:800; color:#2a9cc1;}
+	.fee-amount {font-size: 3em; font-weight:800; color:#2a9cc1; position:top;}
+	.fee-usd {font-size: 1.5em; font-weight:800; color:#2a9cc1;}
 
 	.info div {font-size:3em;}
 	.info label {color:#2a9cc1; font-size:16px;}
@@ -25,9 +38,12 @@
 <div class="homepage-header blue">Bitcoin Exchange Rate Insurance</div>
 
 <div class="homepage-text">
-	No sign up required! &nbsp; Payments only with bitcoins.<br>
-	We will pay you the difference between the current BTC/USD rate <br>and the rate at your chosen expiry date and time (in <a href="http://en.wikipedia.org/wiki/Coordinated_Universal_Time">UTC</a>).
-	<br>The insurance is based on the realtime rate from <a href="https://bitstamp.net">Bitstamp</a>.
+	When your insurance contract expires,<br>
+	you will receive the difference	between<br>
+	the current BTC/USD rate at <a href="https://bitstamp.net">Bitstamp</a><br>
+	and the rate observed at expiry,<br>
+	times the amount that you have ensured.<br><br>
+	No sign up required!&nbsp;&nbsp;Bitcoin payments only.
 </div>
 
 <div class="header2 blue">Select Insurance Parameters</div>
@@ -42,9 +58,9 @@
         <input type="hidden" value="a" name="bh_address" />
 
         <div class="row-fluid">
-            <div class="span4"><label class="control-label form-label" for="protect_direction">INSURE FROM &nbsp;&nbsp;&nbsp;</label>
+            <div class="span3"><label class="control-label form-label" for="protect_direction">INSURE FROM &nbsp;&nbsp;&nbsp;</label>
             </div>
-            <div class="span6">
+            <div class="span9">
                 <select id="protect_direction" onchange="refreshFee()" name="select_direction">
                     <option value="0">DECREASE in bitcoin value vs USD</option>
                     <option value="1">INCREASE in bitcoin value vs USD</option>
@@ -55,37 +71,44 @@
 
         <div class="row-fluid">
 
-            <div class="span4"><label class="control-label form-label" for="id_expiry">EXPIRY &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+            <div class="span3"><label class="control-label form-label" for="id_expiry">EXPIRY<!-- &nbsp;&nbsp;&nbsp;&nbsp;--></label></div>
 
-            <div class="span6 controls input-append date" id="datetimepicker" data-date="{{expiry}}" data-date-format="yyyy-mm-dd hh:mm">
+            <div class="span3 controls input-append date" id="datetimepicker" data-date="{{expiry}}" data-date-format="yyyy-mm-dd hh:mm">
                 <input type="text" class="input-medium" name="expiry" id="id_expiry" value="{{expiry}}">
                 <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
             </div>
 
+			<div class="span6 blue">YYYY-MM-DD HH:MM  <a href="http://time.is/UTC"><b>&nbsp;UTC</b></a></div>
+
         </div>
 
 
         <div class="row-fluid">
-            <div class="span4"><label class="control-label form-label" for="id_amount">AMOUNT TO INSURE &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+            <div class="span3"><label class="control-label form-label" for="id_amount">AMOUNT TO INSURE &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
             <div class="span3"><input class="controls input-append input-medium" type="text" name="amount" id="id_amount" value="{{trgAmount}}"></div>
-            <div class="span5 blue">Minimum: 0.1 &nbsp;&nbsp;&nbsp;&nbsp; Maximum: 1 bitcoin</p></div>
+            <div class="span6 blue">Min: 0.1 &nbsp;&nbsp;&nbsp; Max: 1 bitcoin</div>
         </div>
 
         <div class="row-fluid">
-            <div class="span4"><label class="form-control control-label form-label" for="id_address">YOUR BITCOIN ADDRESS &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
-            <div class="span6"><input class="controls input-append input-medium" type="text" name="address" id="id_address"></div>
+            <div class="span3"><label class="form-control control-label form-label" for="id_address">YOUR BITCOIN ADDRESS &nbsp;&nbsp;&nbsp;&nbsp;</label></div>
+            <div class="span3"><input class="controls input-append input-medium" type="text" name="address" id="id_address"></div>
+            <div class="span6 blue">For insurance payout</div>
         </div>
 
     </form>
+<!------------------------------------------------------------------------------>
+	<div class="row-fluid">
+		<div class="span3 fee-label"><big>INSURANCE FEE: </big></div>
+		<div class="span9"><span class="fee-amount" id="id_fee" name="fee">{{fee}} </span><span class="blue"><big> bitcoins</big></span></div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="span3"></div>
+		<div class="fee-usd">$<span id="id_fee_usd" name="fee_usd">{{fee_usd}}</span></div>
+	</div>
 
 
-    <div class="info blue">
-        <label class="control-label" for="id_fee"><br><b>INSURANCE FEE:</b></label>
-        <div class="controls">BTC &nbsp; <span id="id_fee" name="fee">{{fee}}</span></div>
-        <div class="controls">USD &nbsp; <span id="id_fee_usd" name="fee_usd">{{fee_usd}}</span></div>
-    </div>
-
-    <br><button type="submit" class="btn btn-primary" onclick="return submit_and_countdown()">Place Order</button><br><br>
+    <button type="submit" class="btn btn-primary" onclick="return submit_and_countdown()">Submit Order</button><br><br>
 
 </div>
 
@@ -97,20 +120,22 @@
 
 	<div class="btc_address_our">
 	    <section id="id_bh_address">
-	        <div id="btc_addr_our"><b>Pay the insurance fee within 5 minutes to this bitcoin address:</b>
-		        <span id="id_address_our">(not set)</span><br>Otherwise, your order will be cancelled.
+	        <div id="btc_addr_our">
+				<b>Pay the insurance fee within 5 minutes to this bitcoin address:</b>
+		        <span id="id_address_our">(not set)</span><br>
+		        Otherwise, your order will be cancelled.
 		    </div>
 	    </section>
 	</div>
 
 	<br>
-    You can <a href="/future/query/">check status of your order</a>
+    You can <a href="/future/query/">check the status of your order</a>
     by using order ID: &nbsp; <span id="order_id" class="controls blue bold"></span>
 
 	<hr>
 
 </div>
-
+<!------------------------------------------------------------------------------>
 
 <script type="text/javascript">
     $(document).ready(function() {
