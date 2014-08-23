@@ -1,3 +1,8 @@
+## ISSUES
+
+Error handling needs to be implemented for the cases when user specifies expiry earlier than current time.
+
+
 ##	ArchLinux Install
 
 ### Disable ping responses
