@@ -1,6 +1,6 @@
 ## ISSUES
 
-Error handling needs to be implemented for the cases when the user specifies expiry earlier than current time.
+Error handling needs to be implemented for the cases when the user specifies expiry earlier than now.
 
 
 ##	ArchLinux Install
