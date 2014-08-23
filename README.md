@@ -25,7 +25,8 @@ Error handling needs to be implemented for the cases when the user specifies exp
 ##	Users & Groups: Create & Configure
 
     # groupadd -r sudo
-	# nano /etc/sudoers   # to enable members of group sudo to use sudo.
+    # EDITOR=nano visudo
+	# visudo /etc/sudoers   # to enable members of group sudo to use sudo.
 
 	# useradd -m -g users -G sudo wheel -s /bin/bash tobin
 	# passwd tobin
