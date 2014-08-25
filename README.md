@@ -75,7 +75,7 @@ It must show correct info at all stages of the order lifecycle: Submitted-Cancel
 
 ## Install Bitcoin client
 
-Install [Bitcoin](https://bitcoin.org/en/download) daemon (bitcoind) and make it run at system startup (as root):
+Install [bitcoind](https://bitcoin.org/en/download) and make it run at system startup (as root):
     
     pacman -S bitcoin-daemon
     
