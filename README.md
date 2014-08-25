@@ -1,10 +1,10 @@
 ## ISSUES
 
 ### Past expiry error handling
-	Error handling needs to be implemented for the cases when the user specifies expiry earlier than now.
+Error handling needs to be implemented for the cases when the user specifies expiry earlier than now.
 
 ### Check & fix ['Order Status' page](https://178.79.185.250/future/query/)
-	It must show correct info at all stages of the order lifecycle: Submitted-Cancelled/Paid-Expired.
+It must show correct info at all stages of the order lifecycle: Submitted-Cancelled/Paid-Expired.
 
 ##	ArchLinux Install
 
