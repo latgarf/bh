@@ -22,6 +22,7 @@ def get_bitstamp_rate():
     except:
         # TODO : log warning and need plan B
         pass
+#	return "Bitstamp connection is down"
     return const.BASE_USD_RATE
 
 def get_24h_ma_rate():
