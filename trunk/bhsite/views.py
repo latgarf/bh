@@ -174,8 +174,6 @@ def query(request):
             submitted = Transaction.objects.filter(**filterargs)
             if submitted:
                 i = submitted[0]
-                i.payment_sent = 0.0
-                i.payment_received = 0.0
                 ret = {
 	                'order_id': i.query_id,
 	                'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
@@ -184,6 +182,8 @@ def query(request):
 	                'amount': float(i.amount_ordered),
 	                'addr_user': i.addr_user,
 	                'fee_quoted': float(i.fee_quoted),
+                    'payment_received': 0.0,
+                    'payment_sent':  0.0,
 	                'rate': float(i.rate),
 	                'status_verbal': get_verbal_status(int(i.status))
 	            }
