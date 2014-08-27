@@ -151,7 +151,6 @@ def query(request):
         order_id = request.POST['order_id']
         filterargs = {'query_id': order_id}
         opened = Opened.objects.filter(**filterargs)
-        print("opened[0] = ", opened[0])
 
         if opened:
             o = opened[0]
@@ -173,10 +172,10 @@ def query(request):
 
         else:
             submitted = Transaction.objects.filter(**filterargs)
-            #~ print('submitted = ', submitted)
             if submitted:
                 i = submitted[0]
-	            #~ print('submitted[0] = ', submitted[0])	
+                i.payment_sent = 0.0
+                i.payment_received = 0.0
                 ret = {
 	                'order_id': i.query_id,
 	                'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
