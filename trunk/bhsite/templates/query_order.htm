@@ -122,11 +122,12 @@ body, label, input, button, select, textarea {line-height:initial;}
 
 </fieldset>
 
-<div>This table's implementation is not yet complete. Sorry for the inconvenience.</div><br>
+<div id="incomplete">Some fields in this table are still missing due to temporarily incomplete implementation. Sorry for the inconvenience.</div><br>
 
 <script>
   $(document).ready(function() {
     $("#query_table").hide();
+    $("#incomplete").hide();
   });
 
   function search() {
@@ -140,6 +141,7 @@ body, label, input, button, select, textarea {line-height:initial;}
             if(data.order_id == "") {
               alert("Order " + search_txt + " does not exist!");
               $("#query_table").hide();
+              $("#incomplete").hide();
               return;
             }
 
@@ -156,6 +158,7 @@ body, label, input, button, select, textarea {line-height:initial;}
             
             $("#rate").text(data.rate);
             $("#query_table").show();
+            $("#incomplete").show();
         },
         error: function(data) {
             {# alert('error')#}
