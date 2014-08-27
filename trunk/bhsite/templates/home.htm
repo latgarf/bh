@@ -229,7 +229,7 @@
             data: form.serialize(),
             success: function(data) {
                 if(data.duplicated){
-                    alert("Order already submitted!");
+                    alert("You have already submitted an identical order! Change some parameters!");
                     return false;
                 }
 

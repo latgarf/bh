@@ -10,7 +10,7 @@ class TransactionStatus:
 VERBAL_STATUS = [
     'Waiting for payment',
     'Payment received - full',
-    'payment received - partial',
+    'Payment received - partial',
     'Order cancelled'
     ]
 
