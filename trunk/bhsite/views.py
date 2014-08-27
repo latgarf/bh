@@ -151,10 +151,11 @@ def query(request):
         order_id = request.POST['order_id']
         filterargs = {'query_id': order_id}
         opened = Opened.objects.filter(**filterargs)
-        print("opened = ", opened)
+        print("opened[0] = ", opened[0])
 
         if opened:
             o = opened[0]
+            o.payment_sent = 0.0
             ret = {
             'order_id': o.query_id,
             'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),

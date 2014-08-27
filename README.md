@@ -4,7 +4,7 @@
 Error handling needs to be implemented for the cases when the user specifies expiry earlier than now.
 
 ### Check & fix ['Order Status' page](https://178.79.185.250/future/query/)
-It must show correct info at all stages of the order lifecycle: Submitted-Cancelled/Paid-Expired.
+It must show correct info at all stages of the order life cycle: Submitted-Cancelled/Paid-Expired.
 
 ##	ArchLinux Install
 
@@ -115,11 +115,9 @@ As _bh_ user, create bitcoin config, start the service, and check it is running:
 
 ## Setup Python environment
 
-Install Python 3, `python-virtualenv`, `virtualenvwrapper`:
-
     pacman -S python python-virtualenvwrapper
 
-On Arch Linux, add to `~/.bashrc`:
+Add to `~/.bashrc`:
 
     . /usr/bin/virtualenvwrapper.sh
 
@@ -129,8 +127,10 @@ Then,
     workon bhpy
     pip install numpy scipy django uwsgi
 
-You may need to install `libblas-dev`, `liblapack-dev`, `gfortran` (Ubuntu); `blas`, `lapack`, `gcc-fortran` (Arch Linux) packages for SciPy to compile.
-Alternatively, install SciPy and NumPy from distribution provided packages (for Python 3!) and supply `--system-site-packages` to mkvirtualenv.
+You may need to install `blas`, `lapack`, `gcc-fortran` packages for SciPy to compile on ArchLinux.
+Alternatively, install SciPy and NumPy from distribution provided packages (for python3) 
+and then use option
+    mkvirtualenv --system-site-packages
 
 
 ## Clone Git repo
@@ -194,8 +194,9 @@ Edit `trunk/uwsgi.ini`:
 	chdir=%d
 	module=btchedge.wsgi:application
 	processes=1
-	threads=1
+	threads=2
 	#buffer-size=32768
+	plugin=python
 
 
 ## Start uwsgi, Django
@@ -212,8 +213,8 @@ Edit `trunk/uwsgi.ini`:
     "transaction_id" varchar(64) NOT NULL
 	);
 
-	There's probably a better way to do it - update this section if you know how!
-	bitcoind/bhdb_schema.sql
+There's probably a better way to do it - update this section if you know how to!
+    bitcoind/bhdb_schema.sql
 
 ## Website is ready at  [/future/](http://localhost/future/)
 
