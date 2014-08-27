@@ -4,10 +4,7 @@ from django.contrib.auth.models import User
 from bhsdk.time import now_epoch_str
 import uuid
 
-CURRENCY_CHOICES = (
-    ('USD', 'USD'),
-    ('BTC', 'BTC'),
-)
+CURRENCY_CHOICES = ( ('USD', 'USD'), ('BTC', 'BTC'), )
 
 class Transaction(models.Model):
     time_ordered = models.CharField(max_length=16, default=now_epoch_str)
@@ -27,6 +24,9 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return unicode(self.owner) + '\'s contract at ' + unicode(self.creation_date)
+        #  # is this outdated Python2? Should be like this? -
+        # __str__(self):
+        # return self.name
 
 class Opened(models.Model):
     time_ordered = models.CharField(max_length=16, default=now_epoch_str)

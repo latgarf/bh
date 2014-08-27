@@ -44,11 +44,11 @@ def future(request):
         fee = getPremium(rate, expiry, trgAmount, product_id)
 
         filterargs = {
-            'time_expiry': to_epoch_str(getExpiryTime(expiry)),
-            'amount_ordered': trgAmount,
-            'addr_user': form.cleaned_data['address'],
-            'rate': rate,
-            'product_id': prod_str(product_id)
+            'time_expiry': 		to_epoch_str(getExpiryTime(expiry)),
+            'amount_ordered': 	trgAmount,
+            'addr_user': 		form.cleaned_data['address'],
+            'rate': 			rate,
+            'product_id': 		prod_str(product_id)
         }
 
         duplicated = False
@@ -61,15 +61,15 @@ def future(request):
         else:
             time_expiry = to_epoch_str(getExpiryTime(expiry))
             r = Transaction.objects.create(
-                time_expiry = time_expiry,
-                product_id = prod_str(product_id),
-                amount_ordered = trgAmount,
-                addr_user = form.cleaned_data['address'],
-                addr_our = address_bh,
-                fee_quoted = fee,
-                rate = rate,
-                status = TS.WAIT_FOR_PAYMENT,
-                query_id = query_id
+                time_expiry 	= time_expiry,
+                product_id 		= prod_str(product_id),
+                amount_ordered 	= trgAmount,
+                addr_user 		= form.cleaned_data['address'],
+                addr_our 		= address_bh,
+                fee_quoted 		= fee,
+                rate 			= rate,
+                status 			= TS.WAIT_FOR_PAYMENT,
+                query_id 		= query_id
             )
             logger.info('Create order %s (query ID %s) for IP %s. New BTC address %s' %(r.order_id, r.query_id, getIP(request), address_bh))
 
