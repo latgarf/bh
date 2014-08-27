@@ -156,6 +156,7 @@ def query(request):
         if opened:
             o = opened[0]
             o.payment_sent = 0.0
+            o.payment_received = 0.0
             ret = {
             'order_id': o.query_id,
             'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),
