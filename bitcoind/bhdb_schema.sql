@@ -18,7 +18,7 @@ CREATE TABLE "opened" (
     "payment_sent" decimal
 );
 
-INSERT INTO opened SELECT time_ordered, product_id, time_expiry, amount_ordered, addr_user, addr_our, fee_quoted, rate, status, order_id, query_id, null, null, null,null, null, null FROM submitted;
+INSERT INTO opened SELECT time_ordered, product_id, time_expiry, amount_ordered, addr_user, addr_our, fee_quoted, rate, status, order_id, query_id, null, null, null, null, null, null FROM submitted;
 
 CREATE TABLE "transaction_ids" (
     "order_id" varchar(32) NOT NULL PRIMARY KEY,

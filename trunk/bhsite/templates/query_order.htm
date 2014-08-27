@@ -36,14 +36,7 @@ body, label, input, button, select, textarea {line-height:initial;}
     <tbody>
       <tr class="warning">
         <td>Submitted at</td>
-        <td id="opened"></td>
-      </tr>
-    </tbody>
-
-    <tbody>
-      <tr class="warning">
-        <td>Opened at</td>
-        <td id="time_opened"></td>
+        <td id="time_submitted"></td>
       </tr>
     </tbody>
 
@@ -60,6 +53,14 @@ body, label, input, button, select, textarea {line-height:initial;}
         <td id="type"></td>
       </tr>
     </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>BTC/USD rate quoted</td>
+        <td id="rate"></td>
+      </tr>
+    </tbody>
+
     <tbody>
       <tr class="warning">
         <td>Amount of bitcoins insured</td>
@@ -67,27 +68,7 @@ body, label, input, button, select, textarea {line-height:initial;}
       </tr>
     </tbody>
 
-    <tbody>
-      <tr class="warning">
-        <td>Fee quoted</td>
-        <td id="fee"></td>
-      </tr>
-    </tbody>
-
-    <tbody>
-      <tr class="warning">
-        <td>Fee received</td>
-        <td id="fee_received"></td>
-      </tr>
-    </tbody>
-
-    <tbody>
-      <tr class="warning">
-        <td>BTC/USD rate when quoted</td>
-        <td id="rate"></td>
-      </tr>
-    </tbody>
-
+<!--
     <tbody>
       <tr class="warning">
         <td>BTC/USD rate at opening</td>
@@ -101,18 +82,33 @@ body, label, input, button, select, textarea {line-height:initial;}
         <td id="rate_at_expiry"></td>
       </tr>
     </tbody>
+-->
 
     <tbody>
       <tr class="warning">
-        <td>Your bitcoin address for payout</td>
-        <td id="addr_user"></td>
+        <td>Fee quoted</td>
+        <td id="fee_quoted"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Fee received</td>
+        <td id="payment_received"></td>
       </tr>
     </tbody>
 
      <tbody>
       <tr class="warning">
-        <td>Payout paid</td>
-        <td id="payout_paid"></td>
+        <td>Payout made</td>
+        <td id="payment_sent"></td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr class="warning">
+        <td>Your bitcoin address for payout</td>
+        <td id="addr_user"></td>
       </tr>
     </tbody>
 
@@ -122,7 +118,7 @@ body, label, input, button, select, textarea {line-height:initial;}
 
 </fieldset>
 
-<div id="incomplete">Some fields in this table are still missing due to temporarily incomplete implementation. Sorry for the inconvenience.</div><br>
+<!-- <div id="incomplete_msg">Some fields in this table are still missing due to temporarily incomplete implementation. Sorry for the inconvenience.</div><br> -->
 
 <script>
   $(document).ready(function() {
@@ -141,24 +137,24 @@ body, label, input, button, select, textarea {line-height:initial;}
             if(data.order_id == "") {
               alert("Order " + search_txt + " does not exist!");
               $("#query_table").hide();
-              $("#incomplete").hide();
+              // $("#incomplete").hide();
               return;
             }
 
-            // $("#order_id").text(data.order_id);
-            $("#status").text(data.st);
-            
-            $("#opened").text(data.time_opened);
-            $("#type").text(data.insurance_type);
+            $("#status").text(data.status_verbal);
+            $("#time_submitted").text(data.time_ordered);
             $("#expiry").text(data.expiry);
+            $("#type").text(data.insurance_type);
             $("#amount").text(data.amount);
-            $("#fee").text(data.fee);
-            $("#addr_user").text(data.addr_user);
-            $("#addr_bh").text(data.addr_bh);
-            
             $("#rate").text(data.rate);
+            $("#addr_user").text(data.addr_user);
+            $("#fee_quoted").text(data.fee_quoted);
+            $("#payment_received").text(data.payment_received);
+            $("#payment_sent").text(data.payment_sent);
+            
             $("#query_table").show();
-            $("#incomplete").show();
+            // $("#incomplete_msg").show();
+            
         },
         error: function(data) {
             {# alert('error')#}
@@ -170,5 +166,6 @@ body, label, input, button, select, textarea {line-height:initial;}
 
 </script>
 
+<br>
 {% endblock content %}
 

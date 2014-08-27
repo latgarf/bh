@@ -142,7 +142,8 @@ Alternatively, install SciPy and NumPy from distribution provided packages (for 
 
     cd ~/bh/bhsdk
     workon bhpy
-    pip install . # note trailing dot
+    pip uninstall bhsdk
+    pip install .       # note the trailing dot
 
 `~/bhsdk-config/` will be created.
 

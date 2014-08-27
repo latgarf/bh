@@ -150,48 +150,48 @@ def query(request):
     if(request.method == 'POST'):
         order_id = request.POST['order_id']
         filterargs = {'query_id': order_id}
-        submitted = Transaction.objects.filter(**filterargs)
+        opened = Opened.objects.filter(**filterargs)
+        print("opened = ", opened)
 
-        if submitted:
-            i = submitted[0]
+        if opened:
+            o = opened[0]
             ret = {
-                'order_id': i.query_id,
-                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
-                'insurance_type': get_verbal_insurance_type(i.product_id),
-                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_expiry))),
-                'amount': float(i.amount_ordered),
-                'addr_user': i.addr_user,
-                'addr_bh': i.addr_our,
-                'fee': float(i.fee_quoted),
-                'rate': float(i.rate),
-                'st': get_verbal_status(int(i.status))
+            'order_id': o.query_id,
+            'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),
+            'insurance_type': get_verbal_insurance_type(o.product_id),
+            'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_expiry))),
+            'amount': round( float(o.amount_opened), 8),
+            'addr_user': o.addr_user,
+            'fee_quoted': round( float(o.fee_quoted), 8),
+            'payment_received': round( float(o.payment_received), 8),
+            'payment_sent': round( float(o.payment_sent), 8),
+            'rate': round( float(o.rate), 2),
+            'status_verbal': get_verbal_status(int(o.status))
             }
+
         else:
-            opened = Opened.objects.filter(**filterargs)
-            if opened:
-                o = opened[0]
+            submitted = Transaction.objects.filter(**filterargs)
+            #~ print('submitted = ', submitted)
+            if submitted:
+                i = submitted[0]
+	            #~ print('submitted[0] = ', submitted[0])	
                 ret = {
-                'order_id': o.query_id,
-                'time_opened': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_ordered))),
-                'insurance_type': get_verbal_insurance_type(o.product_id),
-                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(o.time_expiry))),
-                'amount': float(o.amount_opened),
-                'addr_user': o.addr_user,
-                'addr_bh': o.addr_our,
-                'fee': float(o.payment_received),
-                'rate': float(o.rate),
-                'st': get_verbal_status(int(o.status))
-                }
+	                'order_id': i.query_id,
+	                'time_ordered': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_ordered))),
+	                'insurance_type': get_verbal_insurance_type(i.product_id),
+	                'expiry': time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(float(i.time_expiry))),
+	                'amount': float(i.amount_ordered),
+	                'addr_user': i.addr_user,
+	                'fee_quoted': float(i.fee_quoted),
+	                'rate': float(i.rate),
+	                'status_verbal': get_verbal_status(int(i.status))
+	            }
             else:
                 ret = {'order_id': ''}
 
         return HttpResponse(json.dumps(ret), mimetype="application/json")
 
     return render(request, 'query_order.htm')
-
-
-
-
 
 
 
