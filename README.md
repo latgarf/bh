@@ -137,6 +137,7 @@ and then use option
 
     git clone git@github.com:latgarf/bh.git ~/bh
 
+    .gitignore should be configured properly.
 
 ## Install BHSDK
 
@@ -188,13 +189,13 @@ Edit `trunk/uwsgi.ini`:
 	[uwsgi]
 	master=true
 	socket=127.0.0.1:8011
-	#daemonize=%d/../uwsgi.log
+	daemonize=%d/../uwsgi.log
 	pidfile=%d/../uwsgi.pid
 	home=/home/bh/.virtualenvs/bhpy
 	chdir=%d
 	module=btchedge.wsgi:application
 	processes=1
-	threads=2
+	threads=1
 	#buffer-size=32768
 	plugin=python
 
@@ -205,6 +206,8 @@ Edit `trunk/uwsgi.ini`:
     workon bhpy
     ./manage.py syncdb
     uwsgi --ini uwsgi.ini
+    
+    /home/bh/.virtualenvs/bhpy/bin/uwsgi --ini uwsgi.ini --py-autoreload=3
 
 ## ?! Manually create DB table transaction_ids ?
 

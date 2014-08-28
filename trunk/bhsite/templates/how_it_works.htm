@@ -3,52 +3,105 @@
 
 <br><h1>How Our Risk Management Products Work</h1><br>
 
-...
-
 <big>
+<p>First, you should determine what direction of the BTC/USD exchange rate movement would be detrimental to you.<br>
+For example, if you hold bitcoins as investmets, then bitcoin depreciation would erode your value, 
+hence you would want to protect yourself against a decrease in BTC/USD rate.
+On the other hand, if you have borrowed some bitcoins, then an increase in the bitcoin price
+would make the dollar value of your debt bigger.  
+In this case, you would want to protect yourself from BTC/USD rate increases.</p>
+
+<p>Then, decide how many bitcoins you want to protect.</p>
+
+<p>Our contracts are initiated when you press the "Submit Order" button on the <a href="/future/">homepage</a>.<br></p>
+
+<p>You decide the duration of your desired contract, and then specify the expiry date and time.<br>
+Please note that expiry time should be specified in the
+ <a href="http://en.wikipedia.org/wiki/Coordinated_Universal_Time">Coordinated Universal Time (<b>UTC</b>)</a> time zone.<br>
+Please check now how many hours is the time difference 
+between <a href="http://time.is/UTC">UTC</a> and <a href="http://www.timeanddate.com/worldclock/">your local time zone</a>.
+</p>
+
+<p>Please <strong><u>have your bitcoin wallet ready</u></strong> to receive payouts and to make insurance fee payments.</p>
+
+<br><h3>The Order Life Cycle</h3>
+<p>
 <ol>
 	<li><b>Specify insurance parameters</b><br>
-		(expiry, size, and whether to protect from increase or decrease in bitcoin rate)</li><br>
+		<p>On the 	<a href="/future/">homepage</a>, in the "Contract Parameters" form,
+		specify your chosen order size, expiry and<br>
+		order type (whether to protect from increase or decrease in BTC/USD rate).<br>
+		Notice that as you change the parameters, the quoted insurance fee will change in response.</p>
+		<p>Also, in this form's respective field, please paste your bitcoin address 
+		where you want to receive your payouts after your order expires.</li></p>
 	
-	<li><b>Provide your bitcoin address.</b> Your insurance payout will be sent there upon expiry.</li><br>
-	
-	<li><b>Press "Submit Order" button.</b><br>
-		Our bitcoin address will be displayed as a result.</li><br>
+	<li><b>Press the "Submit Order" button.</b><br>
+		<p>After you press the "Submit Order" button, you should see a confirmation that "Your order was received".<br>
+		It will also tell you the bitcoin address where to send your insurance fee payment.<br>
+		If you don't see such confirmation (yellow section with red text), then please check your browser - JavaScript must be enabled.</li></p>
 		
-	<li><b>Make your fee payment to our address within 5 minutes</b><br>
-		(otherwise, your order will be cancelled).<br>
-		If you pay a differen amount than the quote, your order will still be opened, but the size will be adjusted proportionally.<br>
+	<li><b>Make your fee payment within 5 minutes after pressing the "Submit Order" button.</b><br>
+		<p>Your order is not opened until your fee payment is received.<br>
+		If no payment is received within 5 minutes after you pressed the "Submit Order" button, the order is cancelled).</p>
+		<p>If you pay a different amount than the quote, your order will still be opened, but the order size will be adjusted proportionally.
 		For example, if the fee quoted to you for insuring 1 bitcoin was 0.02, but you have paid only 0.01,<br>
-		then a contract to ensure only 0.5 bitcoins will be opened.</li><br>
+		then a contract to insure only 0.5 bitcoins will be opened.</p></li>
 	
-	<li><b>After your contract expires</b><br>
-		If a payment is due to you,	it will be sent to your bitcoin address within a minute.</li>
+	<li><b>Receive a payout when your order expires</b><br>
+		A payout that is due to you, will be sent to your bitcoin address 
+		within a minute after your order expires.</li>
 </ol>
+</p>
 </big>
-
 <hr>
 
-<br>
-<h3>Example:</h3>
+
+<br><h3>Example</h3>
+<p>Bob has saved 2 bitcoins planning to buy a $1000 bike Saturday afternoon on 23th August 2014.<br>
+The day before, he got concerned that if the bitcoin price drops overnight significantly,
+he would not have enough money to make the purchase.</p>
+
+<p>In order to avoid the possible shortage of cash, he decided to insure his 2 bitcoins 
+against the possible drop in the BTC/USD rate at 12noon on Friday, when the BTC/USD rate was $523.10.
+To open an insurance contract, he first specified <a href="/future/">on our homepage</a>, 
+the type of his desired order -"Protect from: DECREASE in bitcoin value vs USD".
+<br><br>
+Then, he needed to specify his contract's expiry time.
+Bob lives in New York. 
+He checked that his local time was four hours behind UTC.<br>
+He wanted to receive his insurance payout at 4pm New York time on Saturday, 24th August 2014,
+that is 2014-08-24 16:00 <a href="http://en.wikipedia.org/wiki/Eastern_Daylight_Time">EDT</a>.
+Therefore, he specified his desired expiry time as 2014-08-24 20:00 UTC.
+The amount to insure is 2 bitoins.
+Then Bob copied his bitcoin address from his wallet and pasted into the form, which now looked like this:</p>
+<hr>
+<img src="/static/images/bob.png" align="left" />
+<br clear="all" /><br>
+<hr>
 <!--
-At 16:00 (4pm) on 30th of October 2013, Bob got concerned that bitcoin will lose its value against USD in the next day.
-Therefore, he decided to buy insurance at that time to protect his holdings of 10 bitcoins against depreciation.
-Bob specified the following parameters for his insurance contract:<br>
-<br>- INSURE FROM DECREASE in bitcoin value vs USD
-<br>- EXPIRY DATE: 2013-10-31
-<br>- AMOUNT TO INSURE: 10 bitcoins
-<br>
-<br>
-Bob opens his bitcoin client app<br>
-and copies his bitcoin address where he wants to receive insurance payment at expiry.
-
-
-
-<br>2013-10-28 09h	194.07
-<br>2013-10-29 21h	201.99
-
-<br><br>	
-<br>2013-10-30 16h	205.00
-<br>2013-10-31 21h	202.30
+<img src="/static/images/logo.gif" width="180" align="left" valign="top" hspace="0" vspace="0" />
 -->
+
+<p>Then Bob pressed the "Submit Order" button.<br>
+The bitcoin address for his fee payment was displayed as a result.<br>
+Bob made his fee payment of 0.038 bitcoins ($19.34) to that address.</p>
+
+<p>When Bob's order expired at 4pm on Saturday, he received a payout of 0.129 bitcoins ($63.40) in his wallet.
+The bitcoin price at expiry was $491.40.  The payout was determined as (523.10 - 491.40) * 2 bitcoins.
+
+Bob was now able to convert his 2.129 bitcoins into $1046.20, exactly the value of his 2.000 bitcoins at insurance contract initiation.<br>
+If he had not entered into this insurance contract, the value of his 2 bitcoins at 4pm on Saturday would be $982.80, 
+and he would not have enough money to buy the $1000 bike.
+</p>	
+<hr>
+
+<br><h3>How You Can Fully Test Our System in 10 minutes</h3>
+<p>Simultaneously submit to orders of different types - one protecting from an <i>decrease</i> and the other from <i>increase</i> in BTC/USD rate.<br>
+Specify the same expiry time for both orders, say 10 minutes from now.<br>
+You may choose to pay a very small insurance fee for your orders, say 0.001 bitcoins.
+No matter the direction of the BTC/USD rate, you are guaranteed to receive one payout when your orders expire in 10 minutes!<br>
+Thanks for emailing us your feedback!
+</p>
+<hr>
+
 {% endblock content %}
