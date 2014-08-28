@@ -18,13 +18,13 @@ body, label, input, button, select, textarea {line-height:initial;}
 
   <div id="search_section">
     <label class="label-status">Input your order ID</label>
-    <input type="text" class="input-medium" id="search_field">
-    <button type="submit" class="btn btn-primary" id="submit_search" onclick="return search()">Display Order Status</button>
+    <input id="search_field" type="text" class="input-medium">
+    <button id="submit_search" type="submit" class="btn btn-primary" onclick="return search()">Display Order Status</button>
   </div>
 
 <fieldset>
 
-  <table class="table table-bordered table-striped table-hover" id="query_table">
+  <table id="query_table" class="table table-bordered table-striped table-hover">
 
     <tbody>
       <tr class="warning">
@@ -63,7 +63,7 @@ body, label, input, button, select, textarea {line-height:initial;}
 
     <tbody>
       <tr class="warning">
-        <td>Amount of bitcoins insured</td>
+        <td>Amount of bitcoins to insure</td>
         <td id="amount"></td>
       </tr>
     </tbody>
@@ -93,14 +93,14 @@ body, label, input, button, select, textarea {line-height:initial;}
 
     <tbody>
       <tr class="warning">
-        <td>Fee received</td>
+        <td>Fee you paid</td>
         <td id="payment_received"></td>
       </tr>
     </tbody>
 
      <tbody>
       <tr class="warning">
-        <td>Payout made</td>
+        <td>Payout paid to you</td>
         <td id="payment_sent"></td>
       </tr>
     </tbody>
