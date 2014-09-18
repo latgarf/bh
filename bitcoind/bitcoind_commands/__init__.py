@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 import subprocess
 import json
 import re
@@ -36,10 +37,10 @@ def sendtoaddress(address, amount):
     if ret == 0:
         # success, return value is transaction id
         # e.g. d5792ed45301917d4dd972b88837c20de8e1bf8156ef13d1d1705333bcb0b64d
-        # TODO: log transaction id, amount, to address
+        # TODO: log transaction id, amount, to_address
         return (ret, output[0])
     else:
-        # {"code": 4, "message": "no sufficient funcs"}
+        # {"code": 4, "message": "insufficient funds"}
         # TODO: log error message
         json_str = re.search('\{.*\}', output[0]).group(0)
         json_obj = json.loads(json_str)

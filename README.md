@@ -9,6 +9,11 @@ It must show correct info at all stages of the order life cycle: Submitted-Cance
 ##	ArchLinux Install
 
 ### Disable ping responses
+(instructions need completion)
+
+[systemd only applies settings from /etc/sysctl.d/* and /usr/lib/sysctl.d/*.](https://wiki.archlinux.org/index.php/sysctl)
+If you customized /etc/sysctl.conf, you must rename it as /etc/sysctl.d/99-sysctl.conf.
+
 
 	# echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all
 	
