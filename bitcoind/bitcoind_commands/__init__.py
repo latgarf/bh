@@ -6,15 +6,6 @@ import re
 import os
 import configparser
 
-# from exceptions import TypeError
-
-# CONFIG_FILE = '/etc/bhsite/bh_bitcoind.conf'
-# if not os.path.exists(CONFIG_FILE):
-#     CONFIG_FILE = 'bh_bitcoind.conf'
-
-# config = configparser.SafeConfigParser()
-# config.read(CONFIG_FILE)
-
 def _run_bitcoind(args):
     args[0] = 'bitcoind ' + args[0]
     p = subprocess.Popen(' '.join(args), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
