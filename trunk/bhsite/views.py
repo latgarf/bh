@@ -35,7 +35,7 @@ def future(request):
     form = SubmitForm(request.POST)
 
     if form.is_valid():
-        address_bh = bs.get_new_address()
+        address_bh = bs.get_new_address_rpc()
         rate=form.cleaned_data['rate']
         expiry=form.cleaned_data['expiry']
         product_id = BTCUSD_PUT_SHORT if form.cleaned_data['select_direction'] == '1' else BTCUSD_CALL_SHORT
@@ -140,7 +140,7 @@ def validate_address(request):
         address = request.POST['address']
         if address:
             bs = BitcoindService()
-            if bs.validate_address(address):
+            if bs.validate_address_rpc(address):
                 ret = 1
     return HttpResponse(json.dumps({'is_valid': ret}), mimetype="application/json")
 
