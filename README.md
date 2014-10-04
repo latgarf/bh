@@ -6,7 +6,7 @@ Error handling needs to be implemented for the cases when the user specifies exp
 ### Check & fix ['Order Status' page](https://178.79.185.250/future/query/)
 It must show correct info at all stages of the order life cycle: Submitted-Cancelled/Paid-Expired.
 
-##	ArchLinux Install
+##	Arch Linux Install
 
 ### Disable ping responses
 (instructions need completion)
@@ -72,6 +72,7 @@ If you customized /etc/sysctl.conf, you must rename it as /etc/sysctl.d/99-sysct
 ### Disable password-based authentication
     ...
     
+
 ###	Dedicated user bh for running bh software:
 
 	# groupadd bh
@@ -111,11 +112,36 @@ As _bh_ user, create bitcoin config, start the service, and check it is running:
     cat >~/.bitcoin/bitcoin.conf <<EOF
     rpcuser=bitcoinrpc
     rpcpassword=AR3pgfhfggfhhgfh54ydaeRHgj89sq4wsfdd
+    rpcallowip=192.168.*
     EOF
     chmod 600 ~/.bitcoin/bitcoin.conf
     sudo systemctl start bitcoind
     sudo systemctl status bitcoind
     bitcoind listaccounts # give it up to 1min to start
+
+## Setup PostgreSQL
+
+    pacman -S postgresql
+    su - postgres -c 'initdb --locale en_US.UTF-8 -D /var/lib/postgres/data'
+
+Edit `/var/lib/postgres/data/postgresql.conf` and set
+
+    listen_address = '*'
+
+Edit `/var/lib/postgres/data/pg_hba.conf` and set
+
+    # TYPE  DATABASE        USER            ADDRESS                 METHOD
+    host    bh              bh              192.168.0.0/16          md5
+
+Start the server:
+
+    systemctl start postgresql
+    systemctl enable postgresql
+
+Create user and database:
+
+    create user bh password '';
+    create database bh owner = bh;
 
 
 ## Setup Python environment
@@ -130,19 +156,21 @@ Then,
 
     mkvirtualenv -p /usr/bin/python3 bhpy
     workon bhpy
-    pip install numpy scipy django uwsgi
+    pip install numpy scipy psycopg2 django uwsgi python-bitcoinrpc
 
-You may need to install `blas`, `lapack`, `gcc-fortran` packages for SciPy to compile on ArchLinux.
-Alternatively, install SciPy and NumPy from distribution provided packages (for python3) 
-and then use option
+Install `postgresql-libs` for psycopg2. You may need to install `blas`, `lapack`, `gcc-fortran` packages for SciPy to compile on Arch Linux. Alternatively, install SciPy and NumPy from distribution provided packages (for python3) and use
+
     mkvirtualenv --system-site-packages
 
+Apply Python 3.4 compatibility [patch](https://github.com/jgarzik/python-bitcoinrpc/pull/34/files) to python-bitcoinrpc 0.1:
+
+    curl https://raw.githubusercontent.com/4tar/python-bitcoinrpc/e43303bba7a671b383016d29f55fd03aa0df235b/bitcoinrpc/authproxy.py \
+        -o $HOME/.virtualenvs/bhpy/lib/python3.4/site-packages/bitcoinrpc/authproxy.py
 
 ## Clone Git repo
 
     git clone git@github.com:latgarf/bh.git ~/bh
 
-    .gitignore should be configured properly.
 
 ## Install BHSDK
 
@@ -214,27 +242,16 @@ Edit `trunk/uwsgi.ini`:
     
     /home/bh/.virtualenvs/bhpy/bin/uwsgi --ini uwsgi.ini --py-autoreload=3
 
-## ?! Manually create DB table transaction_ids ?
-
-	sqlite> CREATE TABLE "transaction_ids" (
-    "order_id" varchar(32) NOT NULL PRIMARY KEY,
-    "transaction_id" varchar(64) NOT NULL
-	);
-
-There's probably a better way to do it - update this section if you know how to!
-    bitcoind/bhdb_schema.sql
-
-## Website is ready at  [/future/](http://localhost/future/)
+### Website is ready at [/future/](http://localhost/future/)
 
 
 ## Payment processing
 
-Setup periodic execution of payment processing scripts:
+Setup periodic execution of payment processing scripts, as `bh` user:
 
+    sudo pacman -S cronie
     crontab - <<EOF
     MAILTO=your@email.tld
     */1 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./paymentchecker.py && ./autopay.py --pay
     # */2 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./fetch_bitstamp_history.py
     EOF
-
-----------------------------------------------------------------------------
