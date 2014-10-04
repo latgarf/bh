@@ -55,3 +55,20 @@ class ShareHolder(models.Model):
 
     class Meta:
         db_table = 'share_registry'
+
+class TransactionId(models.Model):
+    order_id = models.CharField(max_length=36, primary_key=True)
+    transaction_id= models.CharField(max_length=64)
+
+    class Meta:
+        db_table = 'transaction_ids'
+
+class BitstampHistory(models.Model):
+    trade_id = models.AutoField(primary_key=True)
+    ts = models.CharField(max_length=14)
+    tid= models.CharField(max_length=10)
+    price = models.DecimalField(decimal_places=8, max_digits=16)
+    amount = models.DecimalField(decimal_places=8, max_digits=16)
+
+    class Meta:
+        db_table = 'bitstamp_history'
