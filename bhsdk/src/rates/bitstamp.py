@@ -3,14 +3,14 @@ from bhsdk import config
 from bhsdk.time import now_epoch
 import bhsdk.constants as const
 import json
-import sqlite3
+import psycopg2
 import numpy as np
 
 # FIXME: use the one from config file
 BS_DOMAIN = config.get('bitstamp', 'domain')
 RATE_API = config.get('bitstamp', 'rate_api')
 
-TABLE = config.get('sqlite3', 'bitstamp_history_table')
+TABLE = config.get('db', 'bitstamp_history_table')
 
 # Real time rate
 def get_bitstamp_rate():
@@ -29,7 +29,7 @@ def get_24h_ma_rate():
     """ Volume weighted moving average price over last 24 hours. """
 
     try:
-        CONN = sqlite3.connect(config.get('sqlite3', 'db_file'))
+        CONN = psycopg2.connect(config.get('db', 'connect'))
         prices = []
         amounts = []
         threshold = now_epoch() - 24*60*60

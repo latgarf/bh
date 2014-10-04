@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-import sqlite3
+import psycopg2
 import csv
 from bhsdk import config
 
-conn = sqlite3.connect(config.get('sqlite3', 'db_file'))
+conn = psycopg2.connect(config.get('db', 'connect'))
 c = conn.cursor()
 
 total = 0
@@ -18,9 +18,9 @@ with open('share_registry.csv') as f:
         try:
             c.execute('INSERT INTO share_registry VALUES(\'%s\', %s)' % (uid, shares))
             added += 1
-        except sqlite3.IntegrityError:
-            # duplication
-            pass
+        # except sqlite3.IntegrityError:
+        #     # duplication
+        #     pass
     conn.commit()
 
 print('Total: %d, new added: %d' % (total, added))

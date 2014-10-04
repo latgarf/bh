@@ -7,7 +7,7 @@ from bhsdk.enums import TransactionStatus as TS
 from bhsdk.pricing import calculate_payment
 from bhsdk.rates import get_realtime_rate
 from bhsdk import logger_payments as logger
-import sqlite3
+import psycopg2
 import json
 import argparse
 
@@ -24,13 +24,13 @@ def auto_pay(do_pay):
     """ return dict with key uid, value (address, amount). """
 
     min_payment = float(config.get('bitcoind_params', 'min_payment'))
-    conn = sqlite3.connect(config.get('sqlite3', 'db_file'))
+    conn = psycopg2.connect(config.get('db', 'connect'))
     c = conn.cursor()
-    table = config.get('sqlite3', 'opened_table')
+    table = config.get('db', 'opened_table')
 
     query = ("SELECT product_id, order_id, addr_user, amount_opened, rate FROM %s "
-             "WHERE time_expiry <= %s "
-             "AND status=%d") % (table, now_epoch_str(), TS.OPEN)
+             "WHERE time_expiry :: float <= %s " # :/
+             "AND status = %d") % (table, now_epoch_str(), TS.OPEN)
     total = 0
     paid_count = 0
     bs = bitcoind.BitcoindService()
@@ -72,7 +72,7 @@ def auto_pay(do_pay):
 
             # save transaction id into transaction_ids table
             if ret == 0:
-                trans_cmd = 'INSERT INTO %s VALUES(\'%s\', \'%s\')' % (config.get('sqlite3', 'transaction_ids_table'), uid, trans_id)
+                trans_cmd = 'INSERT INTO %s VALUES(\'%s\', \'%s\')' % (config.get('db', 'transaction_ids_table'), uid, trans_id)
                 c.execute(trans_cmd)
                 paid_count +=1
             conn.commit()

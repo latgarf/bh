@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# import os
-import sqlite3
+import psycopg2
 import datetime, time
 import argparse
 
@@ -15,7 +14,7 @@ from bhsdk.time import now_epoch, now_epoch_str
 from bhsdk import logger_payments as logger
 
 MINCONF = config.get('bitcoind_params', 'minconf')
-conn = sqlite3.connect(config.get('sqlite3', 'db_file'))
+conn = psycopg2.connect(config.get('db', 'connect'))
 STATUS_IDX = 8
 UID_IDX = 9
 ADDR_USR_IDX = 5
@@ -32,12 +31,14 @@ def _get_query_str(fields):
 def get_address_dict():
     """ return dict with key uid, value (address, amount). """
     c = conn.cursor()
-    submitted = config.get('sqlite3', 'submitted_table')
-    # col = config.get('sqlite3', 'addr_our_col')
+    submitted = config.get('db', 'submitted_table')
+    # col = config.get('db', 'addr_our_col')
     query = "SELECT * FROM %s WHERE status=%d" % (submitted, TS.WAIT_FOR_PAYMENT)
     ret = {}
-    for a in c.execute(query):
-        ret[a[UID_IDX]] = list(a)
+    i = c.execute(query)
+    if i:
+        for a in i:
+            ret[a[UID_IDX]] = list(a)
     return ret
 
 
@@ -52,7 +53,7 @@ def add_new_order(uid, fields):
         c.execute(query)
 
         # update status
-        update_status_query = 'UPDATE %s set status = %d where order_id=\'%s\'' % (config.get('sqlite3', 'submitted_table'), TS.OPEN, uid)
+        update_status_query = 'UPDATE %s set status = %d where order_id=\'%s\'' % (config.get('db', 'submitted_table'), TS.OPEN, uid)
         c.execute(update_status_query)
         conn.commit()
         return True
@@ -104,20 +105,22 @@ def check_payments(dry_run):
 def check_expiry(dry_run, verbal):
     exp_seconds = int(config.get('orders', 'order_exp_seconds'))
     threshold = now_epoch() - exp_seconds
-    table = config.get('sqlite3', 'submitted_table')
+    table = config.get('db', 'submitted_table')
     c = conn.cursor()
 
     condition = " WHERE time_ordered < '%d' AND status=%d" % (threshold, TS.WAIT_FOR_PAYMENT)
 
-    q = ("SELECT order_id FROM %s " + condition) % table
+    query = ("SELECT order_id FROM %s " + condition) % table
     cnt = 0
-    for r in c.execute(q):
-        cnt += 1
-        if dry_run:
-            if verbal:
-                print('[DRY RUN] Order %s expired' % r[0])
-        else:
-            logger.info('Order %s expired' % r[0])
+    i = c.execute(query)
+    if i:
+        for r in i:
+            cnt += 1
+            if dry_run:
+                if verbal:
+                    print('[DRY RUN] Order %s expired' % r[0])
+            else:
+                logger.info('Order %s expired' % r[0])
 
     if dry_run:
         print('[DRY RUN] %d: Total %d orders expired' % (now_epoch(), cnt))

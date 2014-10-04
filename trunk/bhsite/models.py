@@ -11,12 +11,12 @@ class Transaction(models.Model):
     product_id = models.CharField(max_length=4)
     time_expiry = models.CharField(max_length=16)
     amount_ordered = models.DecimalField(decimal_places=8, max_digits=12)
-    addr_user = models.CharField(max_length=32)
-    addr_our = models.CharField(max_length=32)
+    addr_user = models.CharField(max_length=36)
+    addr_our = models.CharField(max_length=36)
     fee_quoted = models.DecimalField(decimal_places=8, max_digits=12)
     rate = models.DecimalField(decimal_places=2, max_digits=6)
     status = models.IntegerField()
-    order_id = models.CharField(max_length=32, primary_key=True, default=uuid.uuid4)
+    order_id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
     query_id = models.CharField(max_length=32)
 
     class Meta:
@@ -33,12 +33,12 @@ class Opened(models.Model):
     product_id = models.CharField(max_length=4, default='0001')
     time_expiry = models.CharField(max_length=16)
     amount_ordered = models.DecimalField(decimal_places=8, max_digits=12)
-    addr_user = models.CharField(max_length=32)
-    addr_our = models.CharField(max_length=32)
+    addr_user = models.CharField(max_length=36)
+    addr_our = models.CharField(max_length=36)
     fee_quoted = models.DecimalField(decimal_places=8, max_digits=12)
     rate = models.DecimalField(decimal_places=2, max_digits=6)
     status = models.IntegerField()
-    order_id = models.CharField(max_length=32, primary_key=True, default=uuid.uuid4)
+    order_id = models.CharField(max_length=36, primary_key=True, default=uuid.uuid4)
     query_id = models.CharField(max_length=32)
     time_opened = models.CharField(max_length=16, blank=True)
     payment_received = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
@@ -46,6 +46,7 @@ class Opened(models.Model):
     time_closed = models.CharField(null=True, max_length=16, blank=True)
     time_paid = models.CharField(null=True, max_length=16, blank=True)
     payment_sent = models.DecimalField(null=True, max_digits=12, decimal_places=8, blank=True)
+
     class Meta:
         db_table = 'opened'
 

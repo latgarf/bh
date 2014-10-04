@@ -2,17 +2,18 @@
 
 from bhsdk import config
 from http import client
-import sqlite3
+import psycopg2
 import json
 import argparse
 
 
 def get_sentinel_tid(conn, table):
     c = conn.cursor()
-    query="SELECT max(tid) FROM %s" % table
-    for tid in c.execute(query):
-        if tid[0]:
-           return int(tid[0])
+    i = c.execute("SELECT max(tid) FROM %s" % table)
+    if i:
+        for tid in i:
+            if tid[0]:
+               return int(tid[0])
     return -1
 
 def fetch_history_to_db():
@@ -21,8 +22,8 @@ def fetch_history_to_db():
     parser.add_argument('--dry', action='store_true')
     args = parser.parse_args()
 
-    conn = sqlite3.connect(config.get('sqlite3', 'db_file'))
-    t = config.get('sqlite3', 'bitstamp_history_table')
+    conn = psycopg2.connect(config.get('db', 'connect'))
+    t = config.get('db', 'bitstamp_history_table')
 
     domain=config.get('bitstamp', 'domain')
     trans_api = config.get('bitstamp', 'transaction_api')
@@ -42,7 +43,7 @@ def fetch_history_to_db():
         if int(tr['tid'] <= tid):
             continue
         # insert into DB
-        q="INSERT INTO %s VALUES(null, %s, %s, %s, %s)" % (t, tr['date'], tr['tid'], tr['price'], tr['amount'])
+        q = "INSERT INTO %s(ts, tid, price, amount) VALUES(%s, %s, %s, %s)" % (t, tr['date'], tr['tid'], tr['price'], tr['amount'])
         if args.dry:
             print(q)
             continue
