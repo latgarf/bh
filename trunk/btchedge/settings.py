@@ -103,6 +103,8 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 ROOT_URLCONF = 'btchedge.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.

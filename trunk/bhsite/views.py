@@ -85,7 +85,7 @@ def future(request):
         }
 
         ret_json = json.dumps(ret)
-        return HttpResponse(ret_json, mimetype="application/json")
+        return HttpResponse(ret_json, content_type="application/json")
 
     # default values
     rate = get_realtime_rate()
@@ -129,7 +129,7 @@ def premium(request):
 
     json_data = json.dumps({'fee_usd': USD_FORMAT.format(fee_usd), 'fee': NUMER_FORMAT.format(fee), 'rate': USD_FORMAT.format(rate)})
     # json data is just a JSON string now.
-    return HttpResponse(json_data, mimetype="application/json")
+    return HttpResponse(json_data, content_type="application/json")
 
 
 @csrf_exempt
@@ -142,7 +142,7 @@ def validate_address(request):
             bs = BitcoindService()
             if bs.validate_address_rpc(address):
                 ret = 1
-    return HttpResponse(json.dumps({'is_valid': ret}), mimetype="application/json")
+    return HttpResponse(json.dumps({'is_valid': ret}), content_type="application/json")
 
 
 @csrf_exempt
@@ -190,7 +190,7 @@ def query(request):
             else:
                 ret = {'order_id': ''}
 
-        return HttpResponse(json.dumps(ret), mimetype="application/json")
+        return HttpResponse(json.dumps(ret), content_type="application/json")
 
     return render(request, 'query_order.htm')
 
@@ -209,7 +209,7 @@ def investors(request):
             }
         else:
             ret = {'status': 1}
-        return HttpResponse(json.dumps(ret), mimetype="application/json")
+        return HttpResponse(json.dumps(ret), content_type="application/json")
     return render(request, 'shareholders.htm')
 
 
@@ -256,5 +256,5 @@ def admin(request):
         else:
             ret = {'status': 1}
         logger.info('Shareholder request from IP %s for shareholder ID %s' % (getIP(request), filterargs['shareholder_id']))
-        return HttpResponse(json.dumps(ret), mimetype="application/json")
+        return HttpResponse(json.dumps(ret), content_type="application/json")
     return render(request, 'shareholders.htm')
