@@ -247,9 +247,11 @@ Edit `trunk/uwsgi.ini`:
 
 ## Payment processing
 
-Setup periodic execution of payment processing scripts, as `bh` user:
+Setup periodic execution of payment processing scripts, as _bh_ user:
 
     sudo pacman -S cronie
+    systemctl start cronie
+    systemctl enable cronie
     crontab - <<EOF
     MAILTO=your@email.tld
     */1 * * * * cd $HOME/bh/bitcoind && . /usr/bin/virtualenvwrapper.sh && workon bhpy && ./paymentchecker.py && ./autopay.py --pay
