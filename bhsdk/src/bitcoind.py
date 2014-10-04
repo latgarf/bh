@@ -3,6 +3,8 @@
 import json
 import subprocess
 import re
+from bitcoinrpc.authproxy import AuthServiceProxy
+from bhsdk import config
 
 class BitcoindService():
     def __init__(self):
@@ -32,6 +34,7 @@ class BitcoindService():
         j_obj = json.loads(out.decode('utf-8'))
 
         return j_obj
+
     def validate_address(self, address):
         command = 'bitcoind validateaddress %s' % address
         ret = self._get_command_output_json(command)
@@ -40,10 +43,18 @@ class BitcoindService():
                 return True
         return False
 
+    def validate_address_rpc(self, address):
+        rpc = AuthServiceProxy(config.get('bitcoind', 'connect'))
+        return rpc.validateaddress(account)['isvalid']
+
     def get_new_address(self, account=''):
         command = 'bitcoind getnewaddress %s' % account
         li = self._get_command_output_raw(command)
         return next(li).strip()
+
+    def get_new_address_rpc(self, account=''):
+        rpc = AuthServiceProxy(config.get('bitcoind', 'connect'))
+        return rpc.getnewaddress(account)
 
     def sendtoaddress(self, address, amount):
         # FIXME: temporarily solution
